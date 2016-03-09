@@ -1,0 +1,51 @@
+<!-- views/event_planning.ejs -->
+<!doctype html>
+<html>
+<head>
+    <title>Node Authentication</title>
+    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="timeline/timeline.js"></script>
+    <link rel="stylesheet" type="text/css" href="timeline/timeline.css">
+    <link rel="stylesheet" href="/stylesheets/draganddrop.css">
+</head>
+<body>
+<div id="columns">
+  <div class="column" draggable="true" ><header>C1</header></div>
+  <div class="column" draggable="true" ><header>C2</header></div>
+  <div class="column" draggable="true" ><header>C3</header></div>
+</div> 
+
+<div id="dropzone">
+  <div class="dropzone" draggable="true"><header>Drop</header></div>
+</div> 
+
+
+<div class="container">
+    <div class="page-header text-center">
+        <h1><span class="fa fa-anchor"></span> Event Planning(Time Line)</h1>
+        <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+    </div>
+    <a href="/Home" class="btn btn-default"><span class="fa fa-user"></span> Home</a>
+    <a href="/cards" class="btn btn-default"><span class="fa fa-user"></span> Click on cards</a>
+</div>
+<!-- <p>This page demonstrates the timeline visualization.</p>
+<p>Click and drag to move the timeline, scroll to zoom the timeline. Click and drag events to change there date.</p> -->
+
+<!-- <p>
+    <input type="text" value="New text" id="txtContent">
+    <input type="button" value="Add" title="Add new event" onclick="add();">
+    <input type="button" value="Change" title="Change content of selected event" onclick="change();">
+    <input type="button" value="Delete" title="Delete selected event" onclick="doDelete();">
+</p> -->
+
+<div id="mytimeline"></div>
+<!-- Information about where the used icons come from -->
+<!-- <p style="color:gray; font-size:10px; font-style:italic;">
+    Icons by <a href="http://dryicons.com" target="_blank" title="Aesthetica 2 Icons by DryIcons" style="color:gray;" >DryIcons</a>
+    and <a href="http://www.tpdkdesign.net" target="_blank" title="Refresh Cl Icons by TpdkDesign.net" style="color:gray;" >TpdkDesign.net</a>
+</p> -->
+
+<div id="info"></div>
+<script src="/javascripts/draganddrop.js"></script>
+</body>
+</html>
