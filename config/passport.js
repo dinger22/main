@@ -2,7 +2,6 @@
 
 // load all the things we need
 var LocalStrategy   = require('passport-local').Strategy;
-var Strategy = require('passport-http').BasicStrategy;
 
 // load up the user model
 //var User            = require('../app/models/user');
@@ -85,7 +84,7 @@ module.exports = function(passport) {
     // we are using named strategies since we have one for login and one for signup
     // by default, if there was no name, it would just be called 'local'
 
-    passport.use('http-login', new BasicStrategy({
+    passport.use('local-login', new LocalStrategy({
         // by default, local strategy uses username and password, we will override with email
         usernameField : 'email',
         passwordField : 'password',
