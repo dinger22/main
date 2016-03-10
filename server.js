@@ -12,7 +12,7 @@ var morgan       = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 var session      = require('express-session');
-var interact = require('interact-js');
+//var interact = require('interact-js');
 var path = require('path');
 
 
@@ -28,7 +28,7 @@ var con = mysql.createConnection({
 con.connect(function(err){
   if(err){
   	
-    console.log('Error connecting to Db');
+    console.log('Error connecting to Db testtesttest');
     return;
   }
   console.log('Connection established');
