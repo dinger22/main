@@ -1,0 +1,10 @@
+branch-defaults:
+  master:
+    environment: groopmain-env
+global:
+  application_name: groopmain
+  default_ec2_keyname: dingmykey
+  default_platform: 64bit Amazon Linux 2015.09 v2.0.8 running Node.js
+  default_region: us-west-2
+  profile: eb-cli
+  sc: git
