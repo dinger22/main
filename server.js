@@ -22,7 +22,8 @@ var con = mysql.createConnection({
 	host: "aa4spqyqzp9zds.ctrhjjzjrs0h.us-west-2.rds.amazonaws.com",
 	user: "dingy22",
 	password: "11235813",
-	database: "test"
+	database: "test",
+  port:"3306"
 });
 
 con.connect(function(err){
