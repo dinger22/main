@@ -3,7 +3,7 @@
 // get all the tools we need
 var express  = require('express');
 var app      = express();
-var port     = process.env.PORT || 6060;
+var port     = process.env.PORT || 8080;
 var mongoose = require('mongoose');
 var passport = require('passport');
 var flash    = require('connect-flash');
@@ -37,8 +37,8 @@ con.connect(function(err){
 
 con.end(function(err) {
   // The connection is terminated gracefully
-  // Ensures all previouries are still
-  // before sending a COM_QUIT packet to the MySQL s
+  // Ensures all previously enqueued queries are still
+  // before sending a COM_QUIT packet to the MySQL server.
 });
 
 //var configDB = require('./config/database.js');
