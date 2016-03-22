@@ -38,7 +38,7 @@ con.connect(function(err){
 con.end(function(err) {
   // The connection is terminated gracefully
   // Ensures all previously enqueued queries are still
-  // before sending a COM_QUIT pSQL server.
+  // before sending a COM_QUIT packet to the MySQL server.
 });
 
 //var configDB = require('./config/database.js');
