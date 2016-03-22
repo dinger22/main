@@ -1,157 +1,211 @@
-var timeline;
-        var data;
+var tl1,tl2,data,data2;
 
-        google.load("visualization", "1");
+google.load("visualization", "1");
 
-        // Set callback to run when API is loaded
-        google.setOnLoadCallback(drawVisualization);
+// Set callback to run when API is loaded
+google.setOnLoadCallback(drawVisualization);
 
-        // Called when the Visualization API is loaded.
-        function drawVisualization() {
-            // Create and populate a data table.
-            data = new google.visualization.DataTable();
-            data.addColumn('datetime', 'start');
-            data.addColumn('datetime', 'end');
-            data.addColumn('string', 'content');
+// Called when the Visualization API is loaded.
+function createtimeline1(){
+  // Create and populate a data table.
+  data = new google.visualization.DataTable();
+  data.addColumn('datetime', 'start');
+  data.addColumn('datetime', 'end');
+  data.addColumn('string', 'content');
 
 /*            data.addRows([
-                [new Date(2010,7,23), , '<div>Conversation</div><img src="img/comments-icon.png" style="width:32px; height:32px;">'],
-                [new Date(2010,7,23,23,0,0), , '<div>Mail from boss</div><img src="img/mail-icon.png" style="width:32px; height:32px;">'],
-                [new Date(2010,7,24,16,0,0), , 'Report'],
-                [new Date(2010,7,26), new Date(2010,8,2), 'Traject A'],
-                [new Date(2010,7,28), , '<div>Memo</div><img src="img/notes-edit-icon.png" style="width:48px; height:48px;">'],
-                [new Date(2010,7,29), , '<div>Phone call</div><img src="img/Hardware-Mobile-Phone-icon.png" style="width:32px; height:32px;">'],
-                [new Date(2010,7,31), new Date(2010,8,3), 'Traject B'],
-                [new Date(2010,8,4,12,0,0), , '<div>Report</div><img src="img/attachment-icon.png" style="width:32px; height:32px;">']
-            ]);*/
+      [new Date(2010,7,23), , '<div>Conversation</div><img src="img/comments-icon.png" style="width:32px; height:32px;">'],
+      [new Date(2010,7,23,23,0,0), , '<div>Mail from boss</div><img src="img/mail-icon.png" style="width:32px; height:32px;">'],
+      [new Date(2010,7,24,16,0,0), , 'Report'],
+      [new Date(2010,7,26), new Date(2010,8,2), 'Traject A'],
+      [new Date(2010,7,28), , '<div>Memo</div><img src="img/notes-edit-icon.png" style="width:48px; height:48px;">'],
+      [new Date(2010,7,29), , '<div>Phone call</div><img src="img/Hardware-Mobile-Phone-icon.png" style="width:32px; height:32px;">'],
+      [new Date(2010,7,31), new Date(2010,8,3), 'Traject B'],
+      [new Date(2010,8,4,12,0,0), , '<div>Report</div><img src="img/attachment-icon.png" style="width:32px; height:32px;">']
+  ]);*/
 
-            // specify options
-            var options = {
-                'width':  "100%",
-                'height': "300px",
-                'editable': true, // make the events dragable
-                'layout': "box"
-            };
+  // specify options
+  var options = {
+    'width':  "100%",
+    'height': "200px",
+    'editable': true, // make the events dragable
+    'layout': "box"
+  };
 
-            // Instantiate our timeline object.
-            timeline = new links.Timeline(document.getElementById('mytimeline'), options);
+  // Instantiate our timeline object.
+  tl1 = new links.Timeline(document.getElementById('mytimeline'), options);
 
-            // Make a callback function for the select event
-            var onselect = function (event) {
-                var row = undefined;
-                var sel = timeline.getSelection();
-                if (sel.length) {
-                    if (sel[0].row != undefined) {
-                        var row = sel[0].row;
-                    }
-                }
-
-                if (row != undefined) {
-                    var content = data.getValue(row, 2);
-                    document.getElementById("txtContent").value = content;
-                    document.getElementById("info").innerHTML += "event " + row + " selected<br>";
-
-                }
-            };
-
-            // callback function for the change event
-            var onchange = function () {
-                var sel = timeline.getSelection();
-                if (sel.length) {
-                    if (sel[0].row != undefined) {
-                        var row = sel[0].row;
-                        document.getElementById("info").innerHTML += "event " + row + " changed<br>";
-                    }
-                }
-            };
-
-            // callback function for the delete event
-            var ondelete = function () {
-                var sel = timeline.getSelection();
-                if (sel.length) {
-                    if (sel[0].row != undefined) {
-                        var row = sel[0].row;
-                        document.getElementById("info").innerHTML += "event " + row + " deleted<br>";
-                    }
-                }
-            };
-
-            // callback function for the add event
-            var onadd = function () {
-                var count = data.getNumberOfRows();
-                document.getElementById("info").innerHTML += "event " + (count-1) + " added<br>";
-            };
-
-            // Add event listeners
-            google.visualization.events.addListener(timeline, 'select', onselect);
-            google.visualization.events.addListener(timeline, 'change', onchange);
-            google.visualization.events.addListener(timeline, 'delete', ondelete);
-            google.visualization.events.addListener(timeline, 'add', onadd);
-
-            // Draw our timeline with the created data and options
-            timeline.draw(data);
+  // Make a callback function for the select event
+  var onselect = function (event) {
+    var row = undefined;
+    var sel = tl1.getSelection();
+    if (sel.length) {
+        if (sel[0].row != undefined) {
+            var row = sel[0].row;
         }
+    }
 
-        /**
-         * Add a new event
-         */
-        function add() {
-            var range = timeline.getVisibleChartRange();
-            var start = new Date((range.start.valueOf() + range.end.valueOf()) / 2);
-            //var content = document.getElementById("txtContent").value;
+    if (row != undefined) {
+        var content = data.getValue(row, 2);
+        //document.getElementById("txtContent").value = content;
+        document.getElementById("info").innerHTML += "event " + row + " selected<br>";
 
-            timeline.addItem({
-                'start': start,
-                'content': 'new'
-            });
+    }
+  };
 
-            var count = data.getNumberOfRows();
-            timeline.setSelection([{
-                'row': count-1
-            }]);
+  // callback function for the change event
+  var onchange = function () {
+    var sel = tl1.getSelection();
+    if (sel.length) {
+        if (sel[0].row != undefined) {
+            var row = sel[0].row;
+            document.getElementById("info").innerHTML += "event " + row + " changed<br>";
         }
+    }
+  };
 
-        /**
-         * Change the content of the currently selected event
-         */
-        function change() {
-            // retrieve the selected row
-            var sel = timeline.getSelection();
-            if (sel.length) {
-                if (sel[0].row != undefined) {
-                    var row = sel[0].row;
-                }
-            }
+  // callback function for the add event
+  var onadd = function () {
+    var count = data.getNumberOfRows();
+    document.getElementById("info").innerHTML += "event " + (count-1) + " added<br>";
+  };
 
-            if (row != undefined) {
-                var content = document.getElementById("txtContent").value;
-                timeline.changeItem(row, {
-                    'content': content
-                    // Note: start, end, and group can be added here too.
-                });
-            } else {
-                alert("First select an event, then press remove again");
-            }
-        }
+  // Add event listeners
+  google.visualization.events.addListener(tl1, 'select', onselect);
+  google.visualization.events.addListener(tl1, 'change', onchange);
+  google.visualization.events.addListener(tl1, 'complete', oncomplete1);
+  google.visualization.events.addListener(tl1, 'add', onadd);
+  google.visualization.events.addListener(tl1, 'rangechange', onrangechange1);
 
-        /**
-         * Delete the currently selected event
-         */
-        function doDelete() {
-            // retrieve the selected row
-            var sel = timeline.getSelection();
-            if (sel.length) {
-                if (sel[0].row != undefined) {
-                    var row = sel[0].row;
-                }
-            }
+  // Draw our tl1 with the created data and options
+  tl1.draw(data);
+}
 
-            if (row != undefined) {
-                timeline.deleteItem(row);
-            } else {
-                alert("First select an event, then press remove again");
-            }
-        }
+function createtimeline2(){
+    // Create and populate a data table.
+  data2 = new google.visualization.DataTable();
+  data2.addColumn('datetime', 'start');
+  data2.addColumn('datetime', 'end');
+  data2.addColumn('string', 'content');
+
+  // specify options
+  var options = {
+    'axisOnTop': true,
+    'width':  "100%",
+    'height': "200px",
+    'editable': false, // make the events dragable
+    'layout': "box",
+    'showMajorLabels': false,
+    'showMinorLabels': false  
+  };
+
+  // Instantiate our timeline object.
+  tl2 = new links.Timeline(document.getElementById('mytimeline2'), options);
+
+  google.visualization.events.addListener(tl2, 'rangechange', onrangechange2);
+  google.visualization.events.addListener(tl2, 'complete', oncomplete2);
+  // Draw our tl1 with the created data and options
+  tl2.draw(data2);
+}
+
+function drawVisualization() {
+  createtimeline1();
+  createtimeline2();
+}
+
+/**
+ * link 2 timeline together
+ */
+function onrangechange1() {
+  document.getElementById("info").innerHTML+="range changed"
+  var range = tl1.getVisibleChartRange();
+  tl2.setVisibleChartRange(range.start, range.end);  
+}
+
+function onrangechange2() {
+  document.getElementById("info").innerHTML+="range changed"
+  var range = tl2.getVisibleChartRange();
+  tl1.setVisibleChartRange(range.start, range.end);
+}
+
+/**
+ * Add a new event using drag and drop
+ */
+function add() {
+  //var range = tl1.getVisibleChartRange();
+  //var start = new Date((range.start.valueOf() + range.end.valueOf()) / 2);
+  //var content = document.getElementById("txtContent").value;
+  var params = tl1.eventParams,
+      options = tl1.options,
+      dom = tl1.dom,
+      size = tl1.size;
+  var event = event || window.event;
+ // get mouse position
+  params.mouseX = links.Timeline.getPageX(event);
+  params.mouseY = links.Timeline.getPageY(event);
+  var x = params.mouseX - links.Timeline.getAbsoluteLeft(dom.content);
+  var y = params.mouseY - links.Timeline.getAbsoluteTop(dom.content);
+  // create a new event at the current mouse position
+  var xstart = tl1.screenToTime(x);
+  if (options.snapEvents) {
+      tl1.step.snap(xstart);
+  }
+  var content = options.NEW;
+  var group = tl1.getGroupFromHeight(y);   // (group may be undefined)
+  var preventRender = true;
+  tl1.addItem({
+      'start': xstart,
+      'content': content,
+      'group': tl1.getGroupName(group)
+    }, preventRender);
+  params.itemIndex = (tl1.items.length - 1);
+  tl1.selectItem(params.itemIndex);
+
+  tl1.applyAdd = true;
+  // fire an add event.
+  // Note that the change can be canceled from within an event listener if
+  // this listener calls the method cancelAdd().
+  tl1.trigger('add');
+
+  if (tl1.applyAdd) {
+      // render and select the item
+      tl1.render({animate: false});
+      tl1.selectItem(params.itemIndex);
+  }
+  else {
+      // undo an add
+      tl1.deleteItem(params.itemIndex);
+  }
+  links.Timeline.preventDefault(event);
+}
+
+// callback function for the delete event. add the deleted item to the complicated timeline
+function oncomplete1() {
+  var sel = tl1.getSelection();
+  var row = sel[0].row;
+  var item = tl1.items[row];
+  var start = item.start;
+  var content = item.content;
+  tl2.addItem({
+    'start': start,
+    'content': content,
+    'editable': true
+  });
+};
+
+// callback function for the delete event. add the deleted item to the to-do timeline
+function oncomplete2() {
+  var sel = tl2.getSelection();
+  var row = sel[0].row;
+  var item = tl2.items[row];
+  var start = item.start;
+  var content = item.content;
+  tl1.addItem({
+    'start': start,
+    'content': content
+  });
+};
+
 var dragSrcEl = null;
 
 function handleDragStart(e) {
@@ -227,121 +281,4 @@ var dropzs = document.querySelectorAll('.dropzone');
   zon.addEventListener('dragleave', handleDragLeave, false);
   zon.addEventListener('drop', add, false);
   zon.addEventListener('drop', handleDrop, false);
-  //zon.addEventListener('dragend', handleDragEnd, false);
 });
-
-/*interact('.slider')                   // target the matches of that selector
-  .origin('self')                     // (0, 0) will be the element's top-left
-  .restrict({drag: 'self'})           // keep the drag within the element
-  .inertia(true)                      // start inertial movement if thrown
-  .draggable({                        // make the element fire drag events
-    max: Infinity                     // allow drags on multiple elements
-  })
-  .on('dragmove', function (event) {  // call this function on every move
-    var sliderWidth = interact.getElementRect(event.target.parentNode).width,
-        value = event.pageX / sliderWidth;
-
-    event.target.style.paddingLeft = (value * 100) + '%';
-    event.target.setAttribute('data-value', value.toFixed(2));
-  });
-
-interact.maxInteractions(Infinity);   // Allow multiple interactions*/
-    
-
-
-/*    // target elements with the "draggable" class
-interact('.draggable')
-    .draggable({
-// enable inertial throwing
-        snap: {
-            targets: [
-                interact.createSnapGrid({ x: 30, y: 30 })
-            ],
-            range: 500,
-            relativePoints: [ { x: 0, y: 0 } ],
-            //endOnly: true
-        },
-        inertia: true,
-// keep the element within the area of it's parent
-        restrict: {
-            restriction: "parent",
-            endOnly: true,
-            elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
-        },
-// enable autoScroll
-        autoScroll: true,
-
-// call this function on every dragmove event
-        onmove: dragMoveListener,
-// call this function on every dragend event
-        onend: function (event) {
-            var textEl = event.target.querySelector('p');
-
-            textEl && (textEl.textContent =
-                'moved a distance of '
-                + (Math.sqrt(event.dx * event.dx +
-                            event.dy * event.dy)|0) + 'px');
-        }
-});
-
-function dragMoveListener (event) {
-    var textEl = event.target.querySelector('p');
-
-    var target = event.target,
-// keep the dragged position in the data-x/data-y attributes
-        x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
-        y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-
-    // translate the element
-    target.style.webkitTransform =
-    target.style.transform =
-      'translate(' + x + 'px, ' + y + 'px)';
-
-    // update the posiion attributes
-    target.setAttribute('data-x', x);
-    target.setAttribute('data-y', y);
-}
-
-// enable draggables to be dropped into this
-interact('.dropzone').dropzone({
-  // only accept elements matching this CSS selector
-  accept: '#yes-drop',
-  // Require a 75% element overlap for a drop to be possible
-  overlap: 0.75,
-
-  // listen for drop related events:
-
-  ondropactivate: function (event) {
-    // add active dropzone feedback
-    event.target.classList.add('drop-active');
-  },
-  ondragenter: function (event) {
-    var draggableElement = event.relatedTarget,
-        dropzoneElement = event.target;
-
-    // feedback the possibility of a drop
-    dropzoneElement.classList.add('drop-target');
-    draggableElement.classList.add('can-drop');
-    draggableElement.textContent = 'Dragged in';
-
-    //draggableElement.snap.range
-
-  },
-  ondragleave: function (event) {
-    // remove the drop feedback style
-    event.target.classList.remove('drop-target');
-    event.relatedTarget.classList.remove('can-drop');
-    event.relatedTarget.textContent = 'Dragged out';
-  },
-  ondrop: function (event) {
-    event.relatedTarget.textContent = 'Dropped';
-    //event.relatedTarget.restriction = {left:10000,right: 100000,top : 0,bottom: 0};
-  },
-  ondropdeactivate: function (event) {
-    // remove active dropzone feedback
-    event.target.classList.remove('drop-active');
-    event.target.classList.remove('drop-target');
-  }
-});
-// this is used later in the resizing and gesture demos
-window.dragMoveListener = dragMoveListener;    */
