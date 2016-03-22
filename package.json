@@ -9,7 +9,7 @@
     "ejs": "~0.8.5",
     "express": "~4.0.0",
     "express-session": "~1.0.0",
-    "interact-js": "^2.0.1",
+    "fullcalendar": "^2.6.1",
     "method-override": "~1.0.0",
     "mongoose": "~3.8.1",
     "morgan": "~1.0.0",
