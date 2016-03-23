@@ -37,8 +37,8 @@ con.connect(function(err){
 
 con.end(function(err) {
   // The connection is terminated gracefully
-  // Ensures all previouries are still
-  // before sending a COM_QUIT packet to the MySQL s
+  // Ensures all previously enqueued queries are still
+  // before sending a COM_QUIT packet to the MySQL server.
 });
 
 //var configDB = require('./config/database.js');
