@@ -7,6 +7,8 @@
     <script type="text/javascript" src="timeline/timeline.js"></script>
     <link rel="stylesheet" type="text/css" href="timeline/timeline.css">
     <link rel="stylesheet" href="/stylesheets/draganddrop.css">
+    //styles
+    <link rel="stylesheet" href="/stylesheets/styles.css">
 </head>
 <body>
 <div id="columns">
@@ -14,12 +16,10 @@
   <div class="column" draggable="true" ><header>C2</header></div>
   <div class="column" draggable="true" ><header>C3</header></div>
 </div> 
+<!-- new box  -->
+<div id="wrapper">
 
 <div id="dropzone">
-  <div class="dropzone" draggable="true"><header>Drop</header></div>
-</div> 
-
-
 <div class="container">
     <div class="page-header text-center">
         <h1><span class="fa fa-anchor"></span> Event Planning(Time Line)</h1>
@@ -28,6 +28,14 @@
     <a href="/Home" class="btn btn-default"><span class="fa fa-user"></span> Home</a>
     <a href="/cards" class="btn btn-default"><span class="fa fa-user"></span> Click on cards</a>
 </div>
+  <div class="dropzone" draggable="true"><header>Drop</header></div>
+</div> 
+<div id="mytimeline" ></div>
+</div>
+
+
+
+
 <!-- <p>This page demonstrates the timeline visualization.</p>
 <p>Click and drag to move the timeline, scroll to zoom the timeline. Click and drag events to change there date.</p> -->
 
@@ -38,7 +46,9 @@
     <input type="button" value="Delete" title="Delete selected event" onclick="doDelete();">
 </p> -->
 
-<div id="mytimeline"></div>
+<!-- <div id="mytimeline" ></div> -->
+
+
 <div id="mytimeline2"></div>
 <!-- Information about where the used icons come from -->
 <!-- <p style="color:gray; font-size:10px; font-style:italic;">
