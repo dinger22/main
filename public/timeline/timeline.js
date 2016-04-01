@@ -227,7 +227,7 @@ links.Timeline = function(container, options) {
         'ZOOM_OUT': "Zoom out",
         'MOVE_LEFT': "Move left",
         'MOVE_RIGHT': "Move right",
-        'NEW': "New",
+        'NEW': '<p class="titleBorder">Task Title</p> <p class="titleBorder">Assignee</p>',
         'CREATE_NEW_EVENT': "Create new event"
     };
     
@@ -2150,11 +2150,12 @@ links.Timeline.prototype.repaintDeleteButton = function () {
     var index = (this.selection && this.selection.index !== undefined) ? this.selection.index : -1,
         item = (this.selection && this.selection.index !== undefined) ? this.items[index] : undefined;
     if (item && item.rendered && this.isEditable(item)) {
-        var right = item.getRight(this),
-            top = item.top;
+        var right = item.getLeft(this),
+            top = item.top + item.height;
 
         deleteButton.style.left = right + 'px';
-        deleteButton.style.top = top + 'px';
+        deleteButton.style.top = top - 25 + 'px';
+        deleteButton.style.zIndex = 1000;
         deleteButton.style.display = '';
         frame.removeChild(deleteButton);
         frame.appendChild(deleteButton);
@@ -2188,10 +2189,12 @@ links.Timeline.prototype.repaintCompleteButton = function () {
         item = (this.selection && this.selection.index !== undefined) ? this.items[index] : undefined;
     if (item && item.rendered && this.isEditable(item)) {
         var right = item.getRight(this),
-            top = item.top;
+            top = item.top + item.height;
 
-        completeButton.style.left = right + 38 + 'px';
-        completeButton.style.top = top + 'px';
+        completeButton.style.left = right + 'px';
+        completeButton.style.top = top - 25 + 'px';
+        completeButton.style.zIndex = 1000;
+        completeButton.style.backgroundColor = "lightblue";
         completeButton.style.display = '';
         frame.removeChild(completeButton);
         frame.appendChild(completeButton);
