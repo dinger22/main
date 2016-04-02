@@ -1,4 +1,5 @@
 <!-- views/event_planning.ejs -->
+
 <!doctype html>
 <html>
 <head>
@@ -7,6 +8,10 @@
     <script type="text/javascript" src="timeline/timeline.js"></script>
     <link rel="stylesheet" type="text/css" href="timeline/timeline.css">
     <link rel="stylesheet" href="/stylesheets/draganddrop.css">
+    
+<!--     <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <link rel="stylesheet" href="http://jqueryui.com/resources/demos/style.css"> -->
 </head>
 <body>
 <div id="columns">
@@ -22,7 +27,7 @@
 
 <div class="container">
     <div class="page-header text-center">
-        <h1><span class="fa fa-anchor"></span>Event Planning(Time Line)</h1>
+        <h1><span class="fa fa-anchor"></span>EventPlanning(Time Line)</h1>
         <a href="/logout" class="btn btn-default btn-sm">Logout</a>
     </div>
     <a href="/profile" class="btn btn-default"><span class="fa fa-user"></span>Profile</a>
@@ -32,6 +37,17 @@
 <div id="mytimeline2"></div>
 
 <div id="info"></div>
+
+<div id="dialog-form" title="Task">
+  <form>
+  <fieldset>
+    <input type="text" name="title" id="title" class="text ui-widget-content ui-corner-all">
+    <label>Assign to</label>
+    <input type="text" name="asignee" id="asignee" value="" class="text ui-widget-content ui-corner-all">
+  </fieldset>
+  </form>
+</div>
+
 <script src="/javascripts/draganddrop.js"></script>
 </body>
 </html>

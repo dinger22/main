@@ -188,8 +188,8 @@ links.Timeline = function(container, options) {
 
         'min': undefined,
         'max': undefined,
-        'zoomMin': 1000 * 60 * 60 * 24 * 7,     // milliseconds
-        'zoomMax': 1000 * 60 * 60 * 24 * 365 * 50, // milliseconds
+        'zoomMin': 1000 * 60 * 60 * 24 * 14,     // 2 week
+        'zoomMax': 1000 * 60 * 60 * 24 * 365, // 1 year
 
         'moveable': true,
         'zoomable': true,
@@ -1779,6 +1779,7 @@ links.Timeline.prototype.repaintItems = function() {
     // redraw the delete button and dragareas of the selected item (if any)
     this.repaintDeleteButton();
     this.repaintCompleteButton();
+    this.repaintEditButton();
     this.repaintDragAreas();
 
     // put frame online again
@@ -2201,6 +2202,45 @@ links.Timeline.prototype.repaintCompleteButton = function () {
     }
     else {
         completeButton.style.display = 'none';
+    }
+};
+
+/**
+ * Redraw the edit button, on the top right of the currently selected item
+ * if there is no item selected, the button is hidden.
+ */
+links.Timeline.prototype.repaintEditButton = function () {
+    var timeline = this,
+        dom = this.dom,
+        frame = dom.items.frame;
+
+    var editButton = dom.items.editButton;
+    if (!editButton) {
+        // create a complete button
+        editButton = document.createElement("DIV");
+        editButton.className = "timeline-navigation-edit";
+        editButton.style.position = "absolute";
+
+        frame.appendChild(editButton);
+        dom.items.editButton = editButton;
+    }
+
+    var index = (this.selection && this.selection.index !== undefined) ? this.selection.index : -1,
+        item = (this.selection && this.selection.index !== undefined) ? this.items[index] : undefined;
+    if (item && item.rendered && this.isEditable(item)) {
+        var right = item.getRight(this),
+            top = item.top + item.height;
+
+        editButton.style.left = right + 30 +'px';
+        editButton.style.top = top - 25 + 'px';
+        editButton.style.zIndex = 1000;
+        editButton.style.backgroundColor = "lightblue";
+        editButton.style.display = '';
+        frame.removeChild(editButton);
+        frame.appendChild(editButton);
+    }
+    else {
+        editButton.style.display = 'none';
     }
 };
 
@@ -2937,6 +2977,7 @@ links.Timeline.prototype.onMouseMove = function (event) {
             else {
                 this.repaintDeleteButton();
                 this.repaintCompleteButton();
+                this.repaintEditButton();
                 this.repaintDragAreas();
             }
         }
@@ -3101,6 +3142,12 @@ links.Timeline.prototype.onMouseUp = function (event) {
                 // delete item
                 if (this.selection && this.selection.index !== undefined) {
                     this.confirmCompleteItem(this.selection.index);
+                }
+            }
+            else if (params.target === this.dom.items.editButton) {
+                // delete item
+                if (this.selection && this.selection.index !== undefined) {
+                    this.confirmEditItem(this.selection.index);
                 }
             }
             else if (options.selectable) {
@@ -3460,6 +3507,19 @@ links.Timeline.prototype.confirmDeleteItem = function(index) {
     }
 
     delete this.applyDelete;
+};
+
+/**
+ * edit an item.
+ */
+links.Timeline.prototype.confirmEditItem = function(index) {
+    // select the event to be deleted
+    if (!this.isSelected(index)) {
+        this.selectItem(index);
+    }
+
+    // fire a complete event trigger.
+    this.trigger('editEvent');
 };
 
 /**
@@ -5258,6 +5318,7 @@ links.Timeline.prototype.selectItem = function(index) {
         }
         this.repaintDeleteButton();
         this.repaintCompleteButton();
+        this.repaintEditButton();
         this.repaintDragAreas();
     }
 };
@@ -5277,6 +5338,7 @@ links.Timeline.prototype.selectCluster = function(index) {
         };
         this.repaintDeleteButton();
         this.repaintCompleteButton();
+        this.repaintEditButton();
         this.repaintDragAreas();
     }
 };
@@ -5306,6 +5368,7 @@ links.Timeline.prototype.unselectItem = function() {
         this.selection = undefined;
         this.repaintDeleteButton();
         this.repaintCompleteButton();
+        this.repaintEditButton();
         this.repaintDragAreas();
     }
 };

@@ -1,4 +1,22 @@
 var tl1,tl2,data,data2;
+/*$(function(){
+  var title = $("#title"),
+    assignee = $("#assignee");
+  $("#dialog-form").dialog({
+    autoOpen: false,
+    height: 300,
+    width: 350,
+    modal: true,
+    buttons:{
+      "Confirm": function(){
+        $( this ).dialog( "close" );
+      },
+      "Cancel": function() {
+        $( this ).dialog( "close" );
+      }
+    },
+  });
+});*/
 
 google.load("visualization", "1");
 
@@ -76,7 +94,7 @@ function createtimeline1(){
   google.visualization.events.addListener(tl1, 'complete', oncomplete1);
   google.visualization.events.addListener(tl1, 'add', onadd);
   google.visualization.events.addListener(tl1, 'rangechange', onrangechange1);
-
+  google.visualization.events.addListener(tl1, 'editEvent', editEvent);
   // Draw our tl1 with the created data and options
   tl1.draw(data);
 }
@@ -113,9 +131,14 @@ function drawVisualization() {
   createtimeline2();
 }
 
+function editEvent() {
+
+}
+
 /**
  * link 2 timeline together
  */
+
 function onrangechange1() {
   document.getElementById("info").innerHTML+="range changed"
   var range = tl1.getVisibleChartRange();
@@ -135,6 +158,7 @@ function add() {
   //var range = tl1.getVisibleChartRange();
   //var start = new Date((range.start.valueOf() + range.end.valueOf()) / 2);
   //var content = document.getElementById("txtContent").value;
+  $('#dialog-form').dialog('open');
   var params = tl1.eventParams,
       options = tl1.options,
       dom = tl1.dom,

@@ -177,6 +177,7 @@ div.timeline-navigation-zoom-in,
 div.timeline-navigation-zoom-out,
 div.timeline-navigation-move-left,
 div.timeline-navigation-complete,
+div.timeline-navigation-edit,
 div.timeline-navigation-move-right {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -190,6 +191,10 @@ div.timeline-navigation-move-right {
 
 div.timeline-navigation-new {
     background: url('img/16/new.png') no-repeat center;
+}
+
+div.timeline-navigation-edit {
+    background: url('img/16/edit.png') no-repeat center;
 }
 
 /* separator between new and navigation buttons */
