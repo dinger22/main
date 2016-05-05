@@ -33,7 +33,8 @@ function createtimeline1(){
     'height': "200px",
     'editable': true, // make the events dragable
     'snapEvents': false,
-    'layout': "box"
+    'layout': "box",
+    'showMajorLabels': true,
   };
 
   // Instantiate our timeline object.
