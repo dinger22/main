@@ -36,6 +36,11 @@ con.connect(function(err){
 });
 
 con.end(function(err) {
+  if(err){
+    console.log('Error terminate Db ');
+    return;
+  }
+  console.log('Connection terminate');
   // The connection is terminated gracefully
   // Ensures all previously enqueued queries are still
   // before sending a COM_QUIT packet to the MySQL server.
@@ -65,7 +70,7 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 
 // routes ======================================================================
 require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
-
+//require('./app/eventData.js')(app);
 // launch ======================================================================
 app.listen(port);
 /*app.listen = function(){
