@@ -2,7 +2,14 @@
 module.exports = function(app, passport) {
 
     // =====================================
-    // HOME PAGE (with login links) ========
+    // Event Planning (with timeline) ========
+    // =====================================
+    app.get('/event_planning', function(req, res) {
+        res.render('event_planning.ejs'); // load the index.ejs file
+    });
+
+    // =====================================
+    // Index HOME PAGE (with login links) ========
     // =====================================
     app.get('/', function(req, res) {
         res.render('index.ejs'); // load the index.ejs file
@@ -22,55 +29,53 @@ module.exports = function(app, passport) {
 
     // process the login form
     app.post('/login', passport.authenticate('local-login', {
-        successRedirect : '/home', // redirect to the secure profile section
+        successRedirect : '/profile', // redirect to the secure profile section
         failureRedirect : '/login', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
     }));
+
+    // =====================================
+    // Profile==============================
+    // =====================================
+    app.get('/profile', function(req, res) {
+        res.render('profile.ejs',{
+            user : req.user //get the user information 
+        }); 
+    });
+
+    // =====================================
+    // Sign Up (main sign up page)==========
+    // =====================================
     // show the signup form
     app.get('/signup', function(req, res) {
-
         // render the page and pass in any flash data if it exists
         res.render('signup.ejs', { message: req.flash('signupMessage') });
     });
 
     // process the signup form
     app.post('/signup', passport.authenticate('local-signup', {
-        successRedirect : '/home', // redirect to the secure profile section
+        successRedirect : '/signup_profile', // redirect to the secure profile section
         failureRedirect : '/signup', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
     }));
 
     // =====================================
-    // PROFILE SECTION =====================
+    // Sign Up create club(fill in club info page)=======
     // =====================================
-    // we will want this protected so you have to be logged in to visit
-    // we will use route middleware to verify this (the isLoggedIn function)
-    app.get('/profile', isLoggedIn, function(req, res) {
-        res.render('profile.ejs', {
-            user : req.user // get the user out of session and pass to template
-        });
+    // show the signup form
+    app.get('/signup_create_club', function(req, res) {
+        // render the page and pass in any flash data if it exists
+        res.render('signup_create_club.ejs');
     });
 
-    app.get('/home', isLoggedIn, function(req, res) {
-        res.render('home.ejs');
+    // =====================================
+    // Sign Up profile(fill in profile page)=======
+    // =====================================
+    // show the signup form
+    app.get('/signup_profile', function(req, res) {
+        // render the page and pass in any flash data if it exists
+        res.render('signup_profile.ejs');
     });
-
-    app.get('/team_managment', isLoggedIn, function(req, res) {
-        res.render('team_managment.ejs');
-    });
-
-    app.get('/event_planning', isLoggedIn, function(req, res) {
-        res.render('event_planning.ejs');
-    });
-
-    app.get('/creat_new_event', isLoggedIn, function(req, res) {
-        res.render('creat_new_event.ejs');
-    });
-
-    app.get('/cards', isLoggedIn, function(req, res) {
-        res.render('cards.ejs');
-    });
-
 
     // =====================================
     // LOGOUT ==============================
