@@ -2151,10 +2151,10 @@ links.Timeline.prototype.repaintDeleteButton = function () {
     var index = (this.selection && this.selection.index !== undefined) ? this.selection.index : -1,
         item = (this.selection && this.selection.index !== undefined) ? this.items[index] : undefined;
     if (item && item.rendered && this.isEditable(item)) {
-        var right = item.getLeft(this),
+        var left = item.getLeft(this),
             top = item.top + item.height;
 
-        deleteButton.style.left = right + 'px';
+        deleteButton.style.left = left + 'px';
         deleteButton.style.top = top - 25 + 'px';
         deleteButton.style.zIndex = 1000;
         deleteButton.style.display = '';
@@ -2892,140 +2892,145 @@ links.Timeline.prototype.onMouseMove = function (event) {
 
     var diffX = mouseX - params.mouseX;
     var diffY = mouseY - params.mouseY;
-
+    var a_move = true;
     // if mouse movement is big enough, register it as a "moved" event
     if (Math.abs(diffX) >= 1) {
         params.moved = true;
-    }
 
-    if (params.customTime) {
-        var x = this.timeToScreen(params.customTime);
-        var xnew = x + diffX;
-        this.customTime = this.screenToTime(xnew);
-        this.repaintCustomTime();
+        if (params.customTime) {
+            var x = this.timeToScreen(params.customTime);
+            var xnew = x + diffX;
+            this.customTime = this.screenToTime(xnew);
+            this.repaintCustomTime();
 
-        // fire a timechange event
-        this.trigger('timechange');
-    }
-    else if (params.editItem) {
-        var item = this.items[params.itemIndex],
-            left,
-            right;
+            // fire a timechange event
+            this.trigger('timechange');
+        }
+        else if (params.editItem) {
+            var item = this.items[params.itemIndex],
+                left,
+                right;
 
-        if (params.itemDragLeft && options.timeChangeable) {
-            // move the start of the item
-            left = params.itemLeft + diffX;
-            right = params.itemRight;
+            if (params.itemDragLeft && options.timeChangeable) {
+                // move the start of the item
+                left = params.itemLeft + diffX;
+                right = params.itemRight;
 
-            item.start = this.screenToTime(left);
-            if (options.snapEvents) {
-                this.step.snap(item.start);
-                left = this.timeToScreen(item.start);
-            }
-
-            if (left > right) {
-                left = right;
                 item.start = this.screenToTime(left);
-            }
-          this.trigger('change');
-        }
-        else if (params.itemDragRight && options.timeChangeable) {
-            // move the end of the item
-            left = params.itemLeft;
-            right = params.itemRight + diffX;
+                if (options.snapEvents) {
+                    this.step.snap(item.start);
+                    left = this.timeToScreen(item.start);
+                }
 
-            item.end = this.screenToTime(right);
-            if (options.snapEvents) {
-                this.step.snap(item.end);
-                right = this.timeToScreen(item.end);
+                if (left > right) {
+                    left = right;
+                    item.start = this.screenToTime(left);
+                }
+              this.trigger('change');
             }
+            else if (params.itemDragRight && options.timeChangeable) {
+                // move the end of the item
+                left = params.itemLeft;
+                right = params.itemRight + diffX;
 
-            if (right < left) {
-                right = left;
                 item.end = this.screenToTime(right);
+                if (options.snapEvents) {
+                    this.step.snap(item.end);
+                    right = this.timeToScreen(item.end);
+                }
+
+                if (right < left) {
+                    right = left;
+                    item.end = this.screenToTime(right);
+                }
+              this.trigger('change');
             }
-          this.trigger('change');
-        }
-        else if (options.timeChangeable) {
-            // move the item
-            left = params.itemLeft + diffX;
-            item.start = this.screenToTime(left);
-            if (options.snapEvents) {
-                this.step.snap(item.start);
-                left = this.timeToScreen(item.start);
+            else if (options.timeChangeable) {
+                // move the item
+                left = params.itemLeft + diffX;
+                var movedStart = left + (params.itemRight - params.itemLeft)/2;
+                item.start = this.screenToTime(movedStart);
+                if (options.snapEvents) {
+                    this.step.snap(item.start);
+                    left = this.timeToScreen(item.start);
+                }
+
+                if (item.end) {
+                    right = left + (params.itemRight - params.itemLeft);
+                    item.end = this.screenToTime(right);
+                }
+                this.trigger('change');
             }
 
-            if (item.end) {
-                right = left + (params.itemRight - params.itemLeft);
-                item.end = this.screenToTime(right);
-            }
-            this.trigger('change');
-        }
+            //item.setPosition(left, right);
 
-        item.setPosition(left, right);
-
-        var dragging = params.itemDragLeft || params.itemDragRight;
-        if (this.groups.length && !dragging) {
-            // move item from one group to another when needed
-            var y = mouseY - params.frameTop;
-            var group = this.getGroupFromHeight(y);
-            if (options.groupsChangeable && item.group !== group) {
-                // move item to the other group
-                var index = this.items.indexOf(item);
-                this.changeItem(index, {'group': this.getGroupName(group)});
+            var dragging = params.itemDragLeft || params.itemDragRight;
+            if (this.groups.length && !dragging) {
+                // move item from one group to another when needed
+                var y = mouseY - params.frameTop;
+                var group = this.getGroupFromHeight(y);
+                if (options.groupsChangeable && item.group !== group) {
+                    // move item to the other group
+                    var index = this.items.indexOf(item);
+                    this.changeItem(index, {'group': this.getGroupName(group)});
+                }
+                else {
+                    this.repaintDeleteButton();
+                    this.repaintCompleteButton();
+                    this.repaintEditButton();
+                    this.repaintDragAreas();
+                }
             }
             else {
-                this.repaintDeleteButton();
-                this.repaintCompleteButton();
-                this.repaintEditButton();
-                this.repaintDragAreas();
+                // TODO: does not work well in FF, forces redraw with every mouse move it seems
+                //if (diffX != 0){
+                this.render(); // TODO: optimize, only redraw the items?
+                // Note: when animate==true, no redraw is needed here, its done by stackItems animation
+                //}
             }
         }
-        else {
-            // TODO: does not work well in FF, forces redraw with every mouse move it seems
-            this.render(); // TODO: optimize, only redraw the items?
-            // Note: when animate==true, no redraw is needed here, its done by stackItems animation
+        else if (options.moveable) {
+            var interval = (params.end.valueOf() - params.start.valueOf());
+            var diffMillisecs = Math.round((-diffX) / size.contentWidth * interval);
+            var newStart = new Date(params.start.valueOf() + diffMillisecs);
+            var newEnd = new Date(params.end.valueOf() + diffMillisecs);
+            this.applyRange(newStart, newEnd);
+            // if the applied range is moved due to a fixed min or max,
+            // change the diffMillisecs accordingly
+            var appliedDiff = (this.start.valueOf() - newStart.valueOf());
+            if (appliedDiff) {
+                diffMillisecs += appliedDiff;
+            }
+
+            this.recalcConversion();
+
+            // move the items by changing the left position of their frame.
+            // this is much faster than repositioning all elements individually via the
+            // repaintFrame() function (which is done once at mouseup)
+            // note that we round diffX to prevent wrong positioning on millisecond scale
+            var previousLeft = params.previousLeft || 0;
+            var currentLeft = parseFloat(dom.items.frame.style.left) || 0;
+            var previousOffset = params.previousOffset || 0;
+            var frameOffset = previousOffset + (currentLeft - previousLeft);
+            var frameLeft = -diffMillisecs / interval * size.contentWidth + frameOffset;
+
+            dom.items.frame.style.left = (frameLeft) + "px";
+
+            // read the left again from DOM (IE8- rounds the value)
+            params.previousOffset = frameOffset;
+            params.previousLeft = parseFloat(dom.items.frame.style.left) || frameLeft;
+
+/*            this.repaintCurrentTime();
+            this.repaintCustomTime();
+            this.repaintAxis();*/
+            this.render();
+            // fire a rangechange event
+            this.trigger('rangechange');
         }
-    }
-    else if (options.moveable) {
-        var interval = (params.end.valueOf() - params.start.valueOf());
-        var diffMillisecs = Math.round((-diffX) / size.contentWidth * interval);
-        var newStart = new Date(params.start.valueOf() + diffMillisecs);
-        var newEnd = new Date(params.end.valueOf() + diffMillisecs);
-        this.applyRange(newStart, newEnd);
-        // if the applied range is moved due to a fixed min or max,
-        // change the diffMillisecs accordingly
-        var appliedDiff = (this.start.valueOf() - newStart.valueOf());
-        if (appliedDiff) {
-            diffMillisecs += appliedDiff;
-        }
-
-        this.recalcConversion();
-
-        // move the items by changing the left position of their frame.
-        // this is much faster than repositioning all elements individually via the
-        // repaintFrame() function (which is done once at mouseup)
-        // note that we round diffX to prevent wrong positioning on millisecond scale
-        var previousLeft = params.previousLeft || 0;
-        var currentLeft = parseFloat(dom.items.frame.style.left) || 0;
-        var previousOffset = params.previousOffset || 0;
-        var frameOffset = previousOffset + (currentLeft - previousLeft);
-        var frameLeft = -diffMillisecs / interval * size.contentWidth + frameOffset;
-
-        dom.items.frame.style.left = (frameLeft) + "px";
-
-        // read the left again from DOM (IE8- rounds the value)
-        params.previousOffset = frameOffset;
-        params.previousLeft = parseFloat(dom.items.frame.style.left) || frameLeft;
-
-        this.repaintCurrentTime();
-        this.repaintCustomTime();
-        this.repaintAxis();
-
-        // fire a rangechange event
-        this.trigger('rangechange');
+        
     }
 
+    
     links.Timeline.preventDefault(event);
 };
 
@@ -3040,7 +3045,7 @@ links.Timeline.prototype.onMouseUp = function (event) {
         options = this.options;
 
     event = event || window.event;
-
+    //params.moved = false;
     this.dom.frame.style.cursor = 'auto';
 
     // remove event listeners here, important for Safari
@@ -3126,6 +3131,9 @@ links.Timeline.prototype.onMouseUp = function (event) {
             }
 
             this.render();
+        }
+        else {
+            this.confirmEditItem(this.selection.index);
         }
     }
     else {
@@ -3513,6 +3521,8 @@ links.Timeline.prototype.confirmDeleteItem = function(index) {
  * edit an item.
  */
 links.Timeline.prototype.confirmEditItem = function(index) {
+    this.applyDelete = true;
+
     // select the event to be deleted
     if (!this.isSelected(index)) {
         this.selectItem(index);
@@ -3520,6 +3530,11 @@ links.Timeline.prototype.confirmEditItem = function(index) {
 
     // fire a complete event trigger.
     this.trigger('editEvent');
+    if (this.applyDelete) {
+        this.deleteItem(index);
+    }
+
+    delete this.applyDelete;
 };
 
 /**
@@ -4088,11 +4103,11 @@ links.Timeline.ItemBox.prototype.updateDOM = function () {
  * @param {links.Timeline} timeline
  * @override
  */
-links.Timeline.ItemBox.prototype.updatePosition = function (timeline) {
+links.Timeline.ItemBox.prototype.updatePosition = function (timeline, a_move) {
     var dom = this.dom;
     if (dom) {
-        var left = timeline.timeToScreen(this.start),
-            axisOnTop = timeline.options.axisOnTop,
+        var left = timeline.timeToScreen(this.start);
+        var axisOnTop = timeline.options.axisOnTop,
             axisTop = timeline.size.axis.top,
             axisHeight = timeline.size.axis.height,
             boxAlign = (timeline.options.box && timeline.options.box.align) ?
@@ -4113,6 +4128,7 @@ links.Timeline.ItemBox.prototype.updatePosition = function (timeline) {
         var dot = dom.dot;
         line.style.left = (left - this.lineWidth/2) + "px";
         dot.style.left = (left - this.dotWidth/2) + "px";
+
 
         if (axisOnTop) {
             line.style.top = axisHeight + "px";
@@ -4150,7 +4166,7 @@ links.Timeline.ItemBox.prototype.isVisible = function (start, end) {
  */
 links.Timeline.ItemBox.prototype.setPosition = function (left, right) {
     var dom = this.dom;
-
+    //left = left + this.width / 2
     dom.style.left = (left - this.width / 2) + "px";
     dom.line.style.left = (left - this.lineWidth / 2) + "px";
     dom.dot.style.left = (left - this.dotWidth / 2) + "px";
@@ -4176,7 +4192,7 @@ links.Timeline.ItemBox.prototype.getLeft = function (timeline) {
         left = left - width;
     }
     else { // default or 'center'
-        left = (left - this.width / 2);
+        left = (left - this.width / 2);         
     }
 
     return left;
@@ -4200,7 +4216,7 @@ links.Timeline.ItemBox.prototype.getRight = function (timeline) {
     else if (boxAlign == 'left') {
         right = (left + this.width);
     }
-    else { // default or 'center'
+    else { // default or 'center' 
         right = (left + this.width / 2);
     }
 

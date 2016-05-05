@@ -6,12 +6,14 @@
     <title>Node Authentication</title>
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
     <script type="text/javascript" src="timeline/timeline.js"></script>
+    <link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
+    <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    
     <link rel="stylesheet" type="text/css" href="timeline/timeline.css">
     <link rel="stylesheet" href="/stylesheets/draganddrop.css">
+
     
-<!--     <script src="//code.jquery.com/jquery-1.9.1.js"></script>
-    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-    <link rel="stylesheet" href="http://jqueryui.com/resources/demos/style.css"> -->
 </head>
 <body>
 <div id="columns">
@@ -39,14 +41,18 @@
 <div id="info"></div>
 
 <div id="dialog-form" title="Task">
-  <form>
-  <fieldset>
-    <input type="text" name="title" id="title" class="text ui-widget-content ui-corner-all">
-    <label>Assign to</label>
-    <input type="text" name="asignee" id="asignee" value="" class="text ui-widget-content ui-corner-all">
-  </fieldset>
+  <form action="/event_planning" method="post">
+    <fieldset>
+      <input type="text" name="title" id="title" class="text ui-widget-content ui-corner-all" style="margin-bottom:12px; width:95%; padding: .4em;"/>
+      <label>Assign to</label>
+      <input type="text" name="asignee" id="asignee" class="text ui-widget-content ui-corner-all">
+    </fieldset>
+    <button type="submit" class="btn btn-warning btn-lg">Confirm</button>
   </form>
 </div>
+<!-- <div id="display-task-form" title="Task">
+  
+</div>  -->
 
 <script src="/javascripts/draganddrop.js"></script>
 </body>

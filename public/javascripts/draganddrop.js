@@ -1,22 +1,7 @@
+var eventStart;
+var editcontent;
+
 var tl1,tl2,data,data2;
-/*$(function(){
-  var title = $("#title"),
-    assignee = $("#assignee");
-  $("#dialog-form").dialog({
-    autoOpen: false,
-    height: 300,
-    width: 350,
-    modal: true,
-    buttons:{
-      "Confirm": function(){
-        $( this ).dialog( "close" );
-      },
-      "Cancel": function() {
-        $( this ).dialog( "close" );
-      }
-    },
-  });
-});*/
 
 google.load("visualization", "1");
 
@@ -47,6 +32,7 @@ function createtimeline1(){
     'width':  "100%",
     'height': "200px",
     'editable': true, // make the events dragable
+    'snapEvents': false,
     'layout': "box"
   };
 
@@ -112,6 +98,7 @@ function createtimeline2(){
     'width':  "100%",
     'height': "200px",
     'editable': false, // make the events dragable
+    'snapEvents': false,
     'layout': "box",
     'showMajorLabels': false,
     'showMinorLabels': false  
@@ -131,10 +118,6 @@ function drawVisualization() {
   createtimeline2();
 }
 
-function editEvent() {
-
-}
-
 /**
  * link 2 timeline together
  */
@@ -151,20 +134,13 @@ function onrangechange2() {
   tl1.setVisibleChartRange(range.start, range.end);
 }
 
-/**
- * Add a new event using drag and drop
- */
-function add() {
-  //var range = tl1.getVisibleChartRange();
-  //var start = new Date((range.start.valueOf() + range.end.valueOf()) / 2);
-  //var content = document.getElementById("txtContent").value;
-  $('#dialog-form').dialog('open');
+function getPosition(){
   var params = tl1.eventParams,
-      options = tl1.options,
-      dom = tl1.dom,
-      size = tl1.size;
+    options = tl1.options,
+    dom = tl1.dom,
+    size = tl1.size;
   var event = event || window.event;
- // get mouse position
+  // get mouse position
   params.mouseX = links.Timeline.getPageX(event);
   params.mouseY = links.Timeline.getPageY(event);
   var x = params.mouseX - links.Timeline.getAbsoluteLeft(dom.content);
@@ -172,35 +148,65 @@ function add() {
   // create a new event at the current mouse position
   var xstart = tl1.screenToTime(x);
   if (options.snapEvents) {
-      tl1.step.snap(xstart);
+    tl1.step.snap(xstart);
   }
-  var content = options.NEW;
-  var group = tl1.getGroupFromHeight(y);   // (group may be undefined)
-  var preventRender = true;
-  tl1.addItem({
-      'start': xstart,
-      'content': content,
-      'group': tl1.getGroupName(group)
-    }, preventRender);
-  params.itemIndex = (tl1.items.length - 1);
-  tl1.selectItem(params.itemIndex);
+  return xstart;
+}
 
-  tl1.applyAdd = true;
-  // fire an add event.
-  // Note that the change can be canceled from within an event listener if
-  // this listener calls the method cancelAdd().
-  tl1.trigger('add');
 
-  if (tl1.applyAdd) {
-      // render and select the item
-      tl1.render({animate: false});
-      tl1.selectItem(params.itemIndex);
-  }
-  else {
-      // undo an add
-      tl1.deleteItem(params.itemIndex);
-  }
-  links.Timeline.preventDefault(event);
+$(function(){
+  var title = $("#title"),
+    asignee = $("#asignee"),
+    allFields = $( [] ).add( title ).add( asignee );
+
+  $("#dialog-form").dialog({
+    autoOpen: false,
+    height: 300,
+    width: 350,
+    modal: true,
+    buttons:{
+      "Confirm": function(){
+        var content = '<p class="titleBorder">' + title.val() + '</p> <p class="titleBorder">' + asignee.val() + '</p>'
+        tl1.addItem({
+          'start': eventStart,
+          'content': content,
+          //'group': tl1.getGroupName(group)
+        }, true);
+      tl1.eventParams.itemIndex = (tl1.items.length - 1);
+      tl1.selectItem(tl1.eventParams.itemIndex);
+
+      tl1.applyAdd = true;
+      // fire an add event.
+      // Note that the change can be canceled from within an event listener if
+      // this listener calls the method cancelAdd().
+      tl1.trigger('add');
+
+      if (tl1.applyAdd) {
+          // render and select the item
+          tl1.render({animate: false});
+          tl1.selectItem(tl1.eventParams.itemIndex);
+      }
+      else {
+          // undo an add
+          tl1.deleteItem(tl1.eventParams.itemIndex);
+      }
+      links.Timeline.preventDefault(event);
+      $( this).dialog( "close" );
+      },
+      "Cancel": function() {
+        $( this ).dialog( "close" );
+      }
+    },
+    close: function() {
+        allFields.val( "" );
+    }
+  });
+});
+
+
+function openDialog(){
+  eventStart = getPosition();
+  $('#dialog-form').dialog('open');
 }
 
 // callback function for the delete event. add the deleted item to the complicated timeline
@@ -229,6 +235,25 @@ function oncomplete2() {
     'content': content
   });
 };
+
+function editEvent() {
+  var sel = tl1.getSelection();
+  var row = sel[0].row;
+  var item = tl1.items[row];
+  var start = item.start;
+  var content = item.content;
+  var itemTitles = document.getElementsByClassName("titleBorder");
+  var titleVal = itemTitles[2*row].innerHTML;
+  var assignVal = itemTitles[2*row+1].innerHTML;
+  eventStart = start;
+  $('#dialog-form').dialog('open');
+  var title = $("#title");
+  var assign = $("#asignee");
+  title.val(titleVal); 
+  assign.val(assignVal);
+  //tl1.openDialog();
+
+}
 
 var dragSrcEl = null;
 
@@ -292,7 +317,7 @@ var cols = document.querySelectorAll('#columns .column');
   col.addEventListener('dragenter', handleDragEnter, false)
   col.addEventListener('dragover', handleDragOver, false);
   col.addEventListener('dragleave', handleDragLeave, false);
-  col.addEventListener('drop', add, false);
+  col.addEventListener('drop', openDialog, false);
   col.addEventListener('drop', handleDrop, false);
   col.addEventListener('dragend', handleDragEnd, false);
 });
@@ -303,6 +328,6 @@ var dropzs = document.querySelectorAll('.dropzone');
   zon.addEventListener('dragenter', handleDragEnter, false)
   zon.addEventListener('dragover', handleDragOver, false);
   zon.addEventListener('dragleave', handleDragLeave, false);
-  zon.addEventListener('drop', add, false);
+  zon.addEventListener('drop', openDialog, false);
   zon.addEventListener('drop', handleDrop, false);
 });
