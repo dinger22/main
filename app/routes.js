@@ -7,6 +7,38 @@ module.exports = function(app, passport) {
     app.get('/event_planning', function(req, res) {
         res.render('event_planning.ejs'); // load the index.ejs file
     });
+    app.post('/event_planning', function(req, res){
+
+        var mysql        = require("mysql");
+        var connection  = mysql.createConnection({
+            host: "aa4spqyqzp9zds.ctrhjjzjrs0h.us-west-2.rds.amazonaws.com",
+            user: "dingy22",
+            password: "11235813",
+            database: "test"
+        });
+        connection.query("UPDATE users SET data = ? Where email = 'test6@test.com'",[req.body.title],function(err){
+            if(err){
+                console.log("baaaaaaaaaaaaaaaaaaaaaaaaaaad");
+                res.status(500).end();
+                return;
+            }
+            console.log("gooooooooooooooooooooood");
+            res.render('event_planning.ejs');
+            return;
+        });
+        connection.end(function(err) {
+          if(err){
+            console.log('Error terminate Db ');
+            return;
+          }
+          console.log('Connection terminate');
+          return;
+          // The connection is terminated gracefully
+          // Ensures all previously enqueued queries are still
+          // before sending a COM_QUIT packet to the MySQL server.
+        });
+        
+    });
 
     // =====================================
     // Index HOME PAGE (with login links) ========
