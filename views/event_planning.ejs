@@ -1,12 +1,20 @@
 <!-- views/event_planning.ejs -->
+
 <!doctype html>
 <html>
 <head>
     <title>Node Authentication</title>
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
     <script type="text/javascript" src="timeline/timeline.js"></script>
+    <link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
+    <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    
     <link rel="stylesheet" type="text/css" href="timeline/timeline.css">
     <link rel="stylesheet" href="/stylesheets/draganddrop.css">
+
+    //styles
+    <link rel="stylesheet" href="/stylesheets/styles.css">
 </head>
 <body>
 <div id="columns">
@@ -14,24 +22,42 @@
   <div class="column" draggable="true" ><header>C2</header></div>
   <div class="column" draggable="true" ><header>C3</header></div>
 </div> 
+<!-- new box  -->
+<div id="wrapper">
 
 <div id="dropzone">
-  <div class="dropzone" draggable="true"><header>Drop</header></div>
-</div> 
-
-
 <div class="container">
     <div class="page-header text-center">
-        <h1><span class="fa fa-anchor"></span>Event Planning(Time Line)</h1>
+        <h1><span class="fa fa-anchor"></span>EventPlanning(Time Line)</h1>
         <a href="/logout" class="btn btn-default btn-sm">Logout</a>
     </div>
     <a href="/profile" class="btn btn-default"><span class="fa fa-user"></span>Profile</a>
 </div>
 
-<div id="mytimeline"></div>
+<div class="dropzone" draggable="true"><header>Drop</header></div>
+</div> 
+<div id="mytimeline" ></div>
+</div>
+
+
 <div id="mytimeline2"></div>
 
 <div id="info"></div>
+
+<div id="dialog-form" title="Task">
+  <form action="/event_planning" method="post">
+    <fieldset>
+      <input type="text" name="title" id="title" class="text ui-widget-content ui-corner-all" style="margin-bottom:12px; width:95%; padding: .4em;"/>
+      <label>Assign to</label>
+      <input type="text" name="asignee" id="asignee" class="text ui-widget-content ui-corner-all">
+    </fieldset>
+    <button type="submit" class="btn btn-warning btn-lg">Confirm</button>
+  </form>
+</div>
+<!-- <div id="display-task-form" title="Task">
+  
+</div>  -->
+
 <script src="/javascripts/draganddrop.js"></script>
 </body>
 </html>
