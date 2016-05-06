@@ -9,7 +9,7 @@
   -webkit-user-drag: element;
 }
 .dropzone{
-  height: 150px;
+  height: 200px;
   -moz-box-sizing: border-box;
   width: 100%;
   float: left;
@@ -25,13 +25,12 @@
   box-shadow: inset 0 0 3px #000; */
   text-align: center;
   cursor: move;
-  opacity: 0.4;
 
 
 
   /*overlapped layer*/
   z-index: 998;
-  position:absolute;
+  /*position:absolute;*/
 
   
 }
