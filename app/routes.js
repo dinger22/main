@@ -44,7 +44,14 @@ module.exports = function(app, passport) {
     // Index HOME PAGE (with login links) ========
     // =====================================
     app.get('/', function(req, res) {
-        res.render('index.ejs'); // load the index.ejs file
+        res.render('index.ejs',{ 
+            message: req.flash('message') 
+        }); // load the index.ejs file
+    });
+    app.get('/index', function(req, res) {
+        res.render('index.ejs',{ 
+            message: req.flash('message') 
+        }); // load the index.ejs file
     });
 
     // =====================================
@@ -52,17 +59,16 @@ module.exports = function(app, passport) {
     // =====================================
     // show the login form
     app.get('/login', function(req, res) {
-
         // render the page and pass in any flash data if it exists
-        res.render('login.ejs', { 
-            message: req.flash('loginMessage') 
+        res.render('index.ejs', { 
+            message: req.flash('message') 
         }); 
     });
 
     // process the login form
     app.post('/login', passport.authenticate('local-login', {
         successRedirect : '/profile', // redirect to the secure profile section
-        failureRedirect : '/login', // redirect back to the signup page if there is an error
+        failureRedirect : '/index', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
     }));
 
@@ -81,13 +87,13 @@ module.exports = function(app, passport) {
     // show the signup form
     app.get('/signup', function(req, res) {
         // render the page and pass in any flash data if it exists
-        res.render('signup.ejs', { message: req.flash('signupMessage') });
+        res.render('index.ejs', { message: req.flash('message') });
     });
 
     // process the signup form
     app.post('/signup', passport.authenticate('local-signup', {
         successRedirect : '/signup_profile', // redirect to the secure profile section
-        failureRedirect : '/signup', // redirect back to the signup page if there is an error
+        // failureRedirect : '/index', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
     }));
 
