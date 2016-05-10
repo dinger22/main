@@ -2,37 +2,55 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <title>Node Authentication</title>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
-    <style>
-        body        { padding-top:80px; }
-    </style>
+    
+        <div id="header">
+            <h1>Create your profile</h1>
 
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link rel="stylesheet" type="text/css" href="page2_3/css/default.css"/>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        </div>
+
+        <div id="headericon">
+            
+            <img src="/images/Groop_icon.png" height="100px", width="100px">
+
+        </div>
+
+    </div>
+   
+   
+    <!--<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">  load 
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> load fontawesome 
+    <style>
+        body        { padding-top:80px;      </style> -->
+
+   <!-- <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> -->
+   <!-- <link rel="stylesheet" type="text/css" href="page2_3/css/default.css"/> -->
+   <!-- <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">-->
 	<!--<script src="http://www.codefans.net/ajaxjs/jquery-1.6.2.min.js"></script>-->
     <script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+    <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 <body>
-<form action="" class="register">
-            <h2>Create You Profile</h2>
-            <fieldset class="row1">
-                <legend>Personal Details
-                </legend>
+
+<div id = "profilecontent"  >
+   <div class="profilebox1 article">
+<fieldset>
+<form action="" >
+            
+            
+                <p><u>Please input your basic information
+                </u></p>
                 <p>
-                    <label>Name *
+                    <label>Name :
                     </label>
                     <input type="text" class="long"/>
                 </p>
                 <p>
-                    <label>College *
+                    <label>College :
                     </label>
                     <input type="text" maxlength="10"/>
                 </p>
                 <p>
-                    <label>Club *
+                    <label>Club :
                     </label>
                     <select>
                         <option>
@@ -46,7 +64,7 @@
                     </select>
                 </p>
                 <p>
-                    <label>Role *
+                    <label>Role :
                     </label>
                     <select>
                         <option>
@@ -59,9 +77,11 @@
                         </option>
                     </select>
                 </p>
-                <label class="obinfo">* obligatory fields
-                </label>
-            </fieldset>
+               <!-- <label class="obinfo">* obligatory fields
+                </label> -->
+            
+            
+            <!-- No futher info required for now
             <fieldset class="row2">
                 <legend>Further Information
                 </legend>
@@ -161,19 +181,36 @@
                     </select>
                     <input class="year" type="text" size="4" maxlength="4"/>e.g 1976
                 </p>
-            </fieldset>
-            <fieldset class="row2">
-            <h2>Profile Picture</h2>
-            	<p>JPG or GIF only</p>
-				<form name="form0" id="form0" >
-				<img src="" id="img0", height="170", width="170" ><br>
-				<input type="file" name="file0" id="file0" multiple="multiple" />
-				</form>
-            </fieldset>
-            <div>
-            	<a href="/signup_create_club" class="btn btn-default"><span class="fa fa-user"></span>Confirm &raquo;</a>
-            	<a href="/signup" class="btn btn-default"><span class="fa fa-user"></span>Cancel</a>
-            </div>
+            </fieldset> -->
+</fieldset>
+</div> 
+
+
+ <div id="Profile_picture" class="profilebox2 article">
+        <fieldset>
+                
+                <form name="form0" id="form0" >
+                <img src="/images/persona.png" id="img0", height="170", width="170" ><br>
+                <input type="file" name="file0" id="file0" multiple="multiple" />
+                </form>
+                 </fieldset>
+       </div>
+        
+
+     <div id="footbutton" class="">
+                <button><a href="/signup_create_club" class="groopbutton" >Confirm</a></button>
+     </div>
+
+<div id="footbutton" class="">
+                <button><a href="/signup" class="groopbutton" >Cancel</a></button>
+</div>
+
+
+</div> 
+ 
+
+         
+
             <script type="text/javascript" src="page2_3/uploadphoto.js"></script>  
 </body>
 </html>
