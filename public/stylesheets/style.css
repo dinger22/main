@@ -23,6 +23,7 @@ body
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 0px;
+    clear : right;
 }
 
 /*a class for images that need to center*/
@@ -30,6 +31,21 @@ IMG.displayed {
     display: block;
     margin-left: auto;
     margin-right: auto;
+}
+
+/*a class for images that need to center*/
+IMG.displayed_right {
+    display: block;
+    margin-left: auto;
+    margin-right: 3px;
+}
+
+/*a class for images that need to center*/
+IMG.displayed_left {
+    display: block;
+    margin-left: 3px;
+    margin-right: auto;
+    margin-top: 0px;
 }
 
 /* Style the tabs */
@@ -162,16 +178,18 @@ ul.tab li a:focus, .active {
 .form-group{
 	padding: 5px 10%;
 	margin-bottom: 10px;
+	display : block;
 }
 
 .form-group input{
 	padding: 5px 5px;
 	width : 70%;
 	float : right;
+
 }
 
 .form-group label{
-	display : inline-block;
+	/*display : inline-block;*/
 	padding-top: 10px;
 }
 

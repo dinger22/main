@@ -1,5 +1,7 @@
 var eventStart;
 var editcontent;
+var isTask=false,
+  isPayment = false;
 
 var tl1,tl2,data,data2;
 
@@ -157,43 +159,36 @@ function getPosition(){
 
 $(function(){
   var title = $("#title"),
+    title_p = $("#title_p"),
     asignee = $("#asignee"),
     allFields = $( [] ).add( title ).add( asignee );
 
-  $("#dialog-form").dialog({
+  $("#dialog-form-task").dialog({
     autoOpen: false,
-    height: 300,
+    height: 600,
     width: 350,
     modal: true,
     buttons:{
       "Confirm": function(){
-        var content = '<p class="titleBorder">' + title.val() + '</p> <p class="titleBorder">' + asignee.val() + '</p>'
-        tl1.addItem({
-          'start': eventStart,
-          'content': content,
-          //'group': tl1.getGroupName(group)
-        }, true);
-      tl1.eventParams.itemIndex = (tl1.items.length - 1);
-      tl1.selectItem(tl1.eventParams.itemIndex);
+        addTask(title);
+        tl1.eventParams.itemIndex = (tl1.items.length - 1);
+        tl1.selectItem(tl1.eventParams.itemIndex);
 
-      tl1.applyAdd = true;
-      // fire an add event.
-      // Note that the change can be canceled from within an event listener if
-      // this listener calls the method cancelAdd().
-      tl1.trigger('add');
+        tl1.applyAdd = true;
+        tl1.trigger('add');
 
-      if (tl1.applyAdd) {
-          // render and select the item
-          tl1.render({animate: false});
-          tl1.selectItem(tl1.eventParams.itemIndex);
-      }
-      else {
-          // undo an add
-          tl1.deleteItem(tl1.eventParams.itemIndex);
-      }
-      links.Timeline.preventDefault(event);
-      $( this).dialog( "close" );
-      },
+        if (tl1.applyAdd) {
+            // render and select the item
+            tl1.render({animate: false});
+            tl1.selectItem(tl1.eventParams.itemIndex);
+        }
+        else {
+            // undo an add
+            tl1.deleteItem(tl1.eventParams.itemIndex);
+        }
+        links.Timeline.preventDefault(event);
+        $( this).dialog( "close" );
+        },
       "Cancel": function() {
         $( this ).dialog( "close" );
       }
@@ -202,12 +197,87 @@ $(function(){
         allFields.val( "" );
     }
   });
+  $("#dialog-form-payment").dialog({
+
+    autoOpen: false,
+    height: 600,
+    width: 500,
+    modal: true,
+    dialogClass: "MyClass",
+    buttons:{
+      "Confirm": function(){
+        addPayment(title_p);
+        tl1.eventParams.itemIndex = (tl1.items.length - 1);
+        tl1.selectItem(tl1.eventParams.itemIndex);
+
+        tl1.applyAdd = true;
+        // fire an add event.
+        // Note that the change can be canceled from within an event listener if
+        // this listener calls the method cancelAdd().
+        tl1.trigger('add');
+
+        if (tl1.applyAdd) {
+            // render and select the item
+            tl1.render({animate: false});
+            tl1.selectItem(tl1.eventParams.itemIndex);
+        }
+        else {
+            // undo an add
+            tl1.deleteItem(tl1.eventParams.itemIndex);
+        }
+        links.Timeline.preventDefault(event);
+        $( this).dialog( "close" );
+        },
+      "Cancel": function() {
+        $( this ).dialog( "close" );
+      }
+    },
+    create: function(e, ui) {
+      // 'this' is #dialog
+      // get the whole widget (.ui-dialog) with .dialog('widget')
+      $(this).dialog('widget')
+          // alter the css classes
+          .removeClass('ui-corner-all')
+          .addClass('payclass');
+    },
+    close: function() {
+        allFields.val( "" );
+    }
+  });
 });
 
+function addTask(title){
+  var content = "<img src='/images/task-undone-outline.png' style='width:16px; height:16px;float:left'>"+title.val();
+  tl1.addItem({
+    'start': eventStart,
+    'content': content,
+  }, true);
+}
 
+function addPayment(title){
+  var content = "<img src='/images/payment.png' style='width:16px; height:16px;float:left'>"+title.val();
+  tl1.addItem({
+    'start': eventStart,
+    'content': content,
+  }, true);
+}
 function openDialog(){
+  if (isTask){
+    openDialogForTask();
+  }
+  else if(isPayment){
+    openDialogForPayment();
+  }
+}
+
+function openDialogForTask(){
   eventStart = getPosition();
-  $('#dialog-form').dialog('open');
+  $('#dialog-form-task').dialog('open');
+}
+
+function openDialogForPayment(){
+  eventStart = getPosition();
+  $('#dialog-form-payment').dialog('open');
 }
 
 // callback function for the delete event. add the deleted item to the complicated timeline
@@ -243,29 +313,37 @@ function editEvent() {
   var item = tl1.items[row];
   var start = item.start;
   var content = item.content;
-  var itemTitles = document.getElementsByClassName("titleBorder");
-  var titleVal = itemTitles[2*row].innerHTML;
-  var assignVal = itemTitles[2*row+1].innerHTML;
+  var itemTitles = document.getElementById("title");
+  var titleVal = itemTitles.innerHTML;
   eventStart = start;
   $('#dialog-form').dialog('open');
   var title = $("#title");
   var assign = $("#asignee");
   title.val(titleVal); 
-  assign.val(assignVal);
   //tl1.openDialog();
 
 }
 
 var dragSrcEl = null;
 
-function handleDragStart(e) {
+function handleDragTaskStart(e) {
   // Target (this) element is the source node.
-  this.style.opacity = '0.4';
 
   dragSrcEl = this;
 
   e.dataTransfer.effectAllowed = 'move';
   e.dataTransfer.setData('text/html', this.innerHTML);
+  isTask = true;
+}
+
+function handleDragPaymentStart(e) {
+  // Target (this) element is the source node.
+
+  dragSrcEl = this;
+
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/html', this.innerHTML);
+  isPayment = true;
 }
 
 function handleDragOver(e) {
@@ -274,7 +352,6 @@ function handleDragOver(e) {
   }
 
   e.dataTransfer.dropEffect = 'move';  // See the section on the DataTransfer object.
-  this.style.opacity = '0.4';
   return false;
 }
 
@@ -293,42 +370,45 @@ function handleDrop(e) {
   if (e.stopPropagation) {
     e.stopPropagation(); // Stops some browsers from redirecting.
   }
-
-  // Don't do anything if dropping the same column we're dragging.
-/*  if (dragSrcEl != this) {
-    // Set the source column's HTML to the HTML of the column we dropped on.
-    dragSrcEl.innerHTML = this.innerHTML;
-    this.innerHTML = e.dataTransfer.getData('text/html');
-  }*/
-
   return false;
 }
 
 function handleDragEnd(e) {
   // this/e.target is the source node.
 
-  [].forEach.call(cols, function (col) {
-    col.classList.remove('over');
+  [].forEach.call(tas, function (tas) {
+    tas.classList.remove('over');
   });
+  isPayment=false;
+  isTask = false;
 }
 
-var cols = document.querySelectorAll('#columns .column');
-[].forEach.call(cols, function(col) {
-  col.addEventListener('dragstart', handleDragStart, false);
-  col.addEventListener('dragenter', handleDragEnter, false)
-  col.addEventListener('dragover', handleDragOver, false);
-  col.addEventListener('dragleave', handleDragLeave, false);
-  col.addEventListener('drop', openDialog, false);
-  col.addEventListener('drop', handleDrop, false);
-  col.addEventListener('dragend', handleDragEnd, false);
+var tas = document.querySelectorAll('#columns .column');
+[].forEach.call(tas, function(tas) {
+  tas.addEventListener('dragstart', handleDragTaskStart, false);
+  //tas.addEventListener('dragenter', handleDragEnter, false)
+  //tas.addEventListener('dragover', handleDragOver, false);
+  //tas.addEventListener('dragleave', handleDragLeave, false);
+  //tas.addEventListener('drop', openDialogForTask, false);
+  //tas.addEventListener('drop', handleDrop, false);
+  tas.addEventListener('dragend', handleDragEnd, false);
+});
+
+var pay = document.querySelectorAll('#columns .columnpay');
+[].forEach.call(pay, function(pay) {
+  pay.addEventListener('dragstart', handleDragPaymentStart, false);
+  //pay.addEventListener('dragenter', handleDragEnter, false)
+  //pay.addEventListener('dragover', handleDragOver, false);
+  //pay.addEventListener('dragleave', handleDragLeave, false);
+  //pay.addEventListener('drop', openDialogForPayment, false);
+  //pay.addEventListener('drop', handleDrop, false);
+  pay.addEventListener('dragend', handleDragEnd, false);
 });
 
 var dropzs = document.querySelectorAll('.dropzone');
 [].forEach.call(dropzs, function(zon) {
-  //zon.addEventListener('dragstart', handleDragStart, false);
   zon.addEventListener('dragenter', handleDragEnter, false)
   zon.addEventListener('dragover', handleDragOver, false);
   zon.addEventListener('dragleave', handleDragLeave, false);
   zon.addEventListener('drop', openDialog, false);
-  zon.addEventListener('drop', handleDrop, false);
 });
