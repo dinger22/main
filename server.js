@@ -19,11 +19,11 @@ var path = require('path');
 
 var mysql        = require("mysql");
 var con = mysql.createConnection({
-	host: "aa4spqyqzp9zds.ctrhjjzjrs0h.us-west-2.rds.amazonaws.com",
-	user: "dingy22",
+	host: "127.0.0.1",
+	user: "root",
 	password: "11235813",
-	database: "test",
-    port:"3306"
+	database: "users",
+  port:"3306"
 });
 
 con.connect(function(err){

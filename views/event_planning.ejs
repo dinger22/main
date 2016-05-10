@@ -6,54 +6,78 @@
     <title>Node Authentication</title>
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
     <script type="text/javascript" src="timeline/timeline.js"></script>
-    <link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
     <script src="//code.jquery.com/jquery-1.9.1.js"></script>
     <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
     
+    <!-- <link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css"> -->
     <link rel="stylesheet" type="text/css" href="timeline/timeline.css">
     <link rel="stylesheet" href="/stylesheets/draganddrop.css">
-
-    //styles
-    <link rel="stylesheet" href="/stylesheets/styles.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <div class="page-header text-center">
+        <h1><span class="fa fa-anchor"></span>Groop Event Planner</h1>
+    </div>    
 </head>
 <body>
-<div id="columns">
-  <div class="column" draggable="true" ><header>C1</header></div>
-  <div class="column" draggable="true" ><header>C2</header></div>
-  <div class="column" draggable="true" ><header>C3</header></div>
-</div> 
-<!-- new box  -->
-<!-- <div id="wrapper"> -->
-  <div class="container">
-      <div class="page-header text-center">
-          <h1><span class="fa fa-anchor"></span>EventPlanning(Time Line)</h1>
-          <a href="/logout" class="btn btn-default btn-sm">Logout</a>
-      </div>
-      <a href="/profile" class="btn btn-default"><span class="fa fa-user"></span>Profile</a>
+  <img class = "displayed_right" src="/images/groop_icon_logo.png" alt="Groop Logo" width="5%" height="5%">
+
+  <div id="mytimeline" class="dropzone noborder-top" ></div>
+  <div id="mytimeline2"></div>
+
+  
+
+
+  <div id="dialog-form-task">
+    <form action="/event_planning" method="post">
+        <fieldset class="form-group" style = "border : none">
+          <input type="text" name="title_p" id="title_p" class="text ui-widget-content ui-corner-all" style="text-align : center; margin-bottom:12px; width:95%; border:1px;padding: .4em;">
+          <textarea name="title" id="title" class="text ui-widget-content ui-corner-all" style="margin-bottom:12px; width:95%; height : 100px; padding: .4em;"></textarea>
+          <div class="form-group" style = "padding: 5px 0px;">
+            <label>Assign to</label>
+            <input type="text" name="asignee" id="asignee" class="text ui-widget-content ui-corner-all" style="float : right; width:50%;">
+          </div>
+          <div class="form-group" style = "padding: 5px 0px;">
+            <label style = "clear:right">Due Date</label>
+            <input type="date" name="duedate" style="float : right; width:50%;">                
+          </div>
+          <div class="form-group" style = "padding: 5px 0px;">
+            <label style = "clear:right">End Time</label>
+            <input type="time" name="end_time" style="float : right; width:50%;">                
+          </div>
+        </fieldset>
+      <!-- <button type="submit" class="btn btn-warning btn-lg">Confirm</button> -->
+    </form>  
   </div>
-  <!-- <div class="dropzone" style="z-index: 0"><header>Drop</header></div> -->
-  
-<!-- </div> -->
 
-<div id="mytimeline" class="dropzone" ></div>
-<div id="mytimeline2"></div>
+  <div id="dialog-form-payment">
+    <form action="/event_planning" method="post" style=" margin:13%;">
+      <div class="column" draggable="false" >
+          <img class = "displayed_left" src="/images/persona.png" alt="New Task" width="80" height="80" >
+          <label style="padding-left: 7px">Name</label>
+      </div>
+      <fieldset class="form-group" style = "border : none">
+        <div>
+            <textarea name="title" id="title" class="text ui-widget-content ui-corner-all" style="margin-bottom:12px; width:95%; height : 100px; padding: .4em;"></textarea>
+            <div class="form-group" style = "padding : 5px 0px;">
+              <label>CAD</label>
+              <input type="number" name="amount" id="amount" style="float : right; width:50%;">
+            </div>  
+        </div>  
+      </fieldset>
+      <!-- <button type="submit" class="btn btn-warning btn-lg">Confirm</button> -->
+    </form>
+  </div>
 
-<div id="info"></div>
-
-<div id="dialog-form" title="Task">
-  <form action="/event_planning" method="post">
-    <fieldset>
-      <input type="text" name="title" id="title" class="text ui-widget-content ui-corner-all" style="margin-bottom:12px; width:95%; padding: .4em;"/>
-      <label>Assign to</label>
-      <input type="text" name="asignee" id="asignee" class="text ui-widget-content ui-corner-all">
-    </fieldset>
-    <button type="submit" class="btn btn-warning btn-lg">Confirm</button>
-  </form>
-</div>
-<!-- <div id="display-task-form" title="Task">
-  
-</div>  -->
-
-<script src="/javascripts/draganddrop.js"></script>
+  <div id="columns">
+    <div class="column" draggable="true" >
+      <img class = "displayed" src="/images/task-undone-outline.png" alt="New Task" width="80" height="80">
+      <label style="padding-left: 7px">New Task</label>
+    </div>
+    <div class="columnpay" draggable="true" >
+      <img class = "displayed" src="/images/payment.png" alt="Payment" width="80" height="80">
+      <label style="padding-left: 7px">New Payment</label>
+    </div>
+  </div> 
+  <script src="/javascripts/draganddrop.js"></script>
+  <div id="info"></div>
 </body>
 </html>

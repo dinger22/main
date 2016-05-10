@@ -5,13 +5,22 @@ border-style:solid;
 border-color:#287EC7;
 } 
 
-
 div.timeline-frame {
     -moz-box-sizing: border-box;
-    border: 1px solid #bebebe;
+    border: 1px solid #33B2A6;
     box-sizing: border-box;
     overflow: hidden;
     position: relative;
+    border: none;
+}
+
+div.timeline-frame-bottom {
+    -moz-box-sizing: border-box;
+    border: 1px solid #33B2A6;
+    box-sizing: border-box;
+    overflow: hidden;
+    position: relative;
+    border-bottom: none;
 }
 
 div.timeline-content {
@@ -21,7 +30,7 @@ div.timeline-content {
 
 div.timeline-axis {
     -moz-box-sizing: border-box;
-    border-color: #bebebe;
+    border-color: #33B2A6;
     border-top-style: solid;
     border-width: 1px;
     box-sizing: border-box;
@@ -35,11 +44,11 @@ div.timeline-axis-grid {
 }
 
 div.timeline-axis-grid-minor {
-    border-color: #e5e5e5;
+    border-color: #33B2A6;
 }
 
 div.timeline-axis-grid-major {
-    border-color: #bfbfbf;
+    border-color: #33B2A6;
 }
 
 div.timeline-axis-text {
@@ -58,7 +67,9 @@ div.timeline-event {
     -moz-box-sizing: border-box;
     background-color: #d5ddf6;
     border-color: #97b0f8;
-    box-sizing: border-box;
+    height : 30px;
+    max-width: 120px;
+    /*box-sizing: border-box;*/
     color: #1a1a1a;
     display: inline-block;
 }
