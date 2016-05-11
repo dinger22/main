@@ -2,23 +2,62 @@
 <!doctype html>
 <html>
 <head>
-
-	<title>Node Authentication</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
-    <style>
-        body        { padding-top:80px; }
-    </style>
-
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <img class = "displayed" src="/images/Groop_Logo.jpg" alt="Groop Logo">
 </head>
 <body>
-<div class="container">
+    <!-- 2 tabs. 1 for login 1 for singn up -->
+    <ul class="tab">
+        <li><a href="#" class="tablinks active" onclick="Login_or_Signup(event, 'Login')">Log In</a></li>
+        <li><a href="#" class="tablinks" onclick="Login_or_Signup(event, 'Signup')">Sign up</a></li>
+    </ul>
 
-    <div class="jumbotron text-center">
-        <a href="/login" class="btn btn-default"><span class="fa fa-user"></span> Local Login</a>
-        <a href="/signup" class="btn btn-default"><span class="fa fa-user"></span> Local Signup</a>
+    <!-- content for tab login -->
+    <div id="Login" class="tabcontent" style = "display : block;">
+        <!-- LOGIN FORM -->
+        <!-- show any messages that come back with authentication -->
+        <% if (message.length > 0) { %>
+            <div class="alert alert-danger"><%= message %></div>
+        <% } %>
+        <form action="/login" method="post">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="text" class="form-control" name="email">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" class="form-control" name="password">
+            </div>
+
+            <button type="submit" class="groopbutton">Login</button>
+        </form>
+    </div>
+    <!-- content for tab sign up -->
+    <div id="Signup" class="tabcontent">
+        <!-- SIGNUP FORM -->
+        <!-- show any messages that come back with authentication -->
+        <% if (message.length > 0) { %>
+            <div class="alert alert-danger"><%= message %></div>
+        <% } %>
+        <form action="/signup" method="post">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="text" class="form-control" name="email">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" class="form-control" name="password">
+            </div>
+            <div class="form-group">
+                <label>Re-enter Password</label>
+                <input type="password" class="form-control" name="re_password">
+            </div>
+            <button type="submit" class="groopbutton">Confirm</button>
+        </form>
+        <!-- <a href="/signup" class="btn btn-default"><span class="fa fa-user"></span> Local Signup</a> -->
     </div>
 
-</div>
+    <script src="/javascripts/navigation_tabs.js"></script>
 </body>
 </html>

@@ -7,10 +7,10 @@ var LocalStrategy   = require('passport-local').Strategy;
 //var User            = require('../app/models/user');
 var mysql        = require("mysql");
 var connection  = mysql.createConnection({
-    host: "aa4spqyqzp9zds.ctrhjjzjrs0h.us-west-2.rds.amazonaws.com",
-    user: "dingy22",
+    host: "127.0.0.1",
+    user: "root",
     password: "11235813",
-    database: "test"
+    database: "users"
 });
 
 
@@ -57,7 +57,7 @@ module.exports = function(passport) {
             if (err)
                 return done(err);
              if (rows.length) {
-                return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+                return done(null, false, req.flash('message', 'That email is already taken.'));
             } else {
 
                 // if there is no user with that email
@@ -95,12 +95,12 @@ module.exports = function(passport) {
             if (err)
                 return done(err);
              if (!rows.length) {
-                return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
+                return done(null, false, req.flash('message', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
             } 
             
             // if the user is found but the password is wrong
             if (!( rows[0].password == password))
-                return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
+                return done(null, false, req.flash('message', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
             
             // all is well, return successful user
             return done(null, rows[0]);         

@@ -227,7 +227,7 @@ links.Timeline = function(container, options) {
         'ZOOM_OUT': "Zoom out",
         'MOVE_LEFT': "Move left",
         'MOVE_RIGHT': "Move right",
-        'NEW': '<p class="titleBorder">Task Title</p> <p class="titleBorder">Assignee</p>',
+        'NEW': 'Task Title',
         'CREATE_NEW_EVENT': "Create new event"
     };
     
@@ -1416,6 +1416,7 @@ links.Timeline.prototype.repaintAxisMinorLine = function (x) {
         frame = dom.axis.frame,
         minorLines = dom.axis.minorLines,
         index = props.minorLineNum,
+        size = this.size,
         line;
 
     if (index < minorLines.length) {
@@ -1433,7 +1434,7 @@ links.Timeline.prototype.repaintAxisMinorLine = function (x) {
     }
 
     line.style.top = axis.lineMinorTop + "px";
-    line.style.height = axis.lineMinorHeight + "px";
+    line.style.height = size.frameHeight + "px";
     line.style.left = (x - axis.lineMinorWidth/2) + "px";
 
     props.minorLineNum++;
@@ -2151,10 +2152,10 @@ links.Timeline.prototype.repaintDeleteButton = function () {
     var index = (this.selection && this.selection.index !== undefined) ? this.selection.index : -1,
         item = (this.selection && this.selection.index !== undefined) ? this.items[index] : undefined;
     if (item && item.rendered && this.isEditable(item)) {
-        var left = item.getLeft(this),
+        var right = item.getRight(this),
             top = item.top + item.height;
 
-        deleteButton.style.left = left + 'px';
+        deleteButton.style.left = right + 60 + 'px';
         deleteButton.style.top = top - 25 + 'px';
         deleteButton.style.zIndex = 1000;
         deleteButton.style.display = '';
@@ -2360,6 +2361,7 @@ links.Timeline.prototype.repaintNavigation = function () {
                 var w = timeline.size.contentWidth;
                 var x = w / 2;
                 var xstart = timeline.screenToTime(x);
+                var xend = xstart + 1000 * 60 * 60 * 24
                 if (options.snapEvents) {
                     timeline.step.snap(xstart);
                 }
@@ -2369,6 +2371,7 @@ links.Timeline.prototype.repaintNavigation = function () {
                 var preventRender = true;
                 timeline.addItem({
                     'start': xstart,
+                    'end' : xend,
                     'content': content,
                     'group': group
                 }, preventRender);
@@ -3224,7 +3227,6 @@ links.Timeline.prototype.onDblClick = function (event) {
             if (options.snapEvents) {
                 this.step.snap(xstart);
             }
-
             var content = options.NEW;
             var group = this.getGroupFromHeight(y);   // (group may be undefined)
             var preventRender = true;
@@ -3958,8 +3960,8 @@ links.Timeline.ItemBox.prototype.reflow = function () {
 links.Timeline.ItemBox.prototype.select = function () {
     var dom = this.dom;
     links.Timeline.addClassName(dom, 'timeline-event-selected ui-state-active');
-    links.Timeline.addClassName(dom.line, 'timeline-event-selected ui-state-active');
-    links.Timeline.addClassName(dom.dot, 'timeline-event-selected ui-state-active');
+    //links.Timeline.addClassName(dom.line, 'timeline-event-selected ui-state-active');
+    //links.Timeline.addClassName(dom.dot, 'timeline-event-selected ui-state-active');
 };
 
 /**
@@ -3969,8 +3971,8 @@ links.Timeline.ItemBox.prototype.select = function () {
 links.Timeline.ItemBox.prototype.unselect = function () {
     var dom = this.dom;
     links.Timeline.removeClassName(dom, 'timeline-event-selected ui-state-active');
-    links.Timeline.removeClassName(dom.line, 'timeline-event-selected ui-state-active');
-    links.Timeline.removeClassName(dom.dot, 'timeline-event-selected ui-state-active');
+    //links.Timeline.removeClassName(dom.line, 'timeline-event-selected ui-state-active');
+    //links.Timeline.removeClassName(dom.dot, 'timeline-event-selected ui-state-active');
 };
 
 /**
@@ -4032,10 +4034,10 @@ links.Timeline.ItemBox.prototype.showDOM = function (container) {
 
         // append to this container
         container.appendChild(dom);
-        container.insertBefore(dom.line, container.firstChild);
+        //container.insertBefore(dom.line, container.firstChild);
         // Note: line must be added in front of the this,
         //       such that it stays below all this
-        container.appendChild(dom.dot);
+        //container.appendChild(dom.dot);
         this.rendered = true;
     }
 };

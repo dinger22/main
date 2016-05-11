@@ -1,3 +1,68 @@
+.ui-button {
+  text-align: center;
+  background-color: #33B2A6;
+  color : white;
+  border-radius: 25px;
+  width : 30%;
+  height : 50px;
+  display: inline-block;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+.ui-dialog {
+  overflow: hidden;
+  position: absolute;
+  width: 200px;
+  height: 500px;
+  top: 0;
+  left: 0;
+  padding: .2em;
+  outline: 0;
+  border: 2px solid #33B2A6; 
+  background: #FFFFFF;
+}
+
+
+
+.ui-dialog .ui-dialog-titlebar-close {
+  display: none;
+}
+.ui-dialog .ui-dialog-buttonpane {
+  text-align: center;
+  border-width: 1px 0 0 0;
+  background-image: none;
+  margin-top: .5em;
+  padding: .3em 1em .5em .4em;
+}
+
+.ui-dialog .ui-dialog-content {
+  border:none;
+}
+
+.payclass{
+  border: 2px solid #33B2A6;
+  border-radius: 50%;
+  background-image: url("/images/coin.jpg");
+  background-size: 500px 470px;
+  background-repeat: no-repeat;
+}
+
+.MyClass .ui-button{
+  /*text-align: center;*/
+  background-color: #33B2A6;
+  color : white;
+  width : 30%;
+  height : 50px;
+  margin:0px;
+  margin-bottom: 15%;
+  margin-right: 5%;
+  margin-left: 5%;
+}
+.MyClass .ui-dialog-titlebar-close {
+  display: none;
+}
+
 /* Prevent the text contents of draggable elements from being selectable. */
 [draggable] {
   -moz-user-select: none;
@@ -9,7 +74,7 @@
   -webkit-user-drag: element;
 }
 .dropzone{
-  height: 150px;
+  height: 200px;
   -moz-box-sizing: border-box;
   width: 100%;
   float: left;
@@ -20,149 +85,42 @@
   -ms-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
- /* -webkit-box-shadow: inset 0 0 3px #000;
-  -ms-box-shadow: inset 0 0 3px #000;
-  box-shadow: inset 0 0 3px #000; */
   text-align: center;
   cursor: move;
-  opacity: 0.4;
-
-
-
   /*overlapped layer*/
-  z-index: 998;
-  position:absolute;
-
-  
+  z-index: 10;
+  /*position:absolute;*/
 }
-.column {
-  height: 150px;
-  width: 150px;
+
+.noborder-top{
+  height: 200px;
+  -moz-box-sizing: border-box;
+  width: 100%;
   float: left;
-  border: 2px solid #666666;
-  background-color: #ccc;
+  border: 2px solid #666666; 
+  /*background-color: #ccc; */
   margin-right: 5px;
   -webkit-border-radius: 10px;
   -ms-border-radius: 10px;
   -moz-border-radius: 10px;
-  border-radius: 10px;
-  -webkit-box-shadow: inset 0 0 3px #000;
-  -ms-box-shadow: inset 0 0 3px #000;
-  box-shadow: inset 0 0 3px #000;
+  border-radius: 0px;
   text-align: center;
   cursor: move;
+  /*overlapped layer*/
+  z-index: 100;
+  border-left: none;
+  border-top: none;
+  border-right:none;
+  /*position:absolute;*/
 }
-.column header {
-  color: #fff;
-  text-shadow: #000 0 1px;
-  box-shadow: 5px;
-  padding: 5px;
-  background: -moz-linear-gradient(left center, rgb(0,0,0), rgb(79,79,79), rgb(21,21,21));
-  background: -webkit-gradient(linear, left top, right top,
-                               color-stop(0, rgb(0,0,0)),
-                               color-stop(0.50, rgb(79,79,79)),
-                               color-stop(1, rgb(21,21,21)));
-  background: -webkit-linear-gradient(left center, rgb(0,0,0), rgb(79,79,79), rgb(21,21,21));
-  background: -ms-linear-gradient(left center, rgb(0,0,0), rgb(79,79,79), rgb(21,21,21));
-  border-bottom: 1px solid #ddd;
-  -webkit-border-top-left-radius: 10px;
-  -moz-border-radius-topleft: 10px;
-  -ms-border-radius-topleft: 10px;
-  border-top-left-radius: 10px;
-  -webkit-border-top-right-radius: 10px;
-  -ms-border-top-right-radius: 10px;
-  -moz-border-radius-topright: 10px;
-  border-top-right-radius: 10px;
-}
-.column.over {
-  border: 2px dashed #000;
+.column {
+  float:left;
+  margin-top: 40px;
+  margin-right: 20px;
 }
 
-/* 
-#drag-me::before {
-  content: "#" attr(id);
-  font-weight: bold;
+.columnpay {
+  float:left;
+  margin-top: 40px;
+  margin-right: 20px;
 }
-
-*************************************************************************************
-the slider bar
-.slider {
-  position: relative;
-  width: 100%;
-  height: 1em;
-  margin: 1.5em auto;
-  background-color: #29e;
-  border-radius: 0.5em;
-  box-sizing: border-box;
-  
-  font-size: 8vmin;
-  
-  -ms-touch-action: none;
-      touch-action: none;
-}
-
-the slider handle
-.slider:before {
-  content: "";
-  display: block;
-  position: relative;
-  top: -0.5em;
-
-  width: 2em;
-  height: 2em;
-  margin-left: -1em;
-  border: solid 0.25em #fff;
-  border-radius: 1em;
-  background-color: inherit;
-
-  box-sizing: border-box;
-}
-
-*************************************************************************************
-#outer-dropzone {
-  height: 140px;
-}
-
-#inner-dropzone {
-  height: 80px;
-}
-
-.dropzone {
-  background-color: #ccc;
-  border: dashed 4px transparent;
-  border-radius: 4px;
-  margin: 10px auto 30px;
-  padding: 10px;
-  width: 80%;
-  transition: background-color 0.3s;
-}
-
-.drop-active {
-  border-color: #aaa;
-}
-
-.drop-target {
-  background-color: #29e;
-  border-color: #fff;
-  border-style: solid;
-}
-
-.drag-drop {
-  display: inline-block;
-  min-width: 40px;
-  padding: 2em 0.5em;
-
-  color: #fff;
-  background-color: #29e;
-  border: solid 2px #fff;
-
-  -webkit-transform: translate(0px, 0px);
-          transform: translate(0px, 0px);
-
-  transition: background-color 0.3s;
-}
-
-.drag-drop.can-drop {
-  color: #000;
-  background-color: #4e4;
-} */
