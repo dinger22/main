@@ -1,121 +1,83 @@
 <!-- views/signup.ejs -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-
-        
-
-    
-    <!--link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
-    <!--link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
-    <!--style>
-        body        { padding-top:80px; }
-    </style-->
-    <link rel="stylesheet" href="/stylesheets/style.css">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <!--link rel="stylesheet" type="text/css" href="page2_3/css/default.css"/-->
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<!--<script src="http://www.codefans.net/ajaxjs/jquery-1.6.2.min.js"></script>-->
+<head>   
     <script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <div id="header">
+        <h1>Create New Club</h1>
+    </div>
+    <div id="headericon">  
+        <img src="/images/Groop_icon.png" height="100px", width="100px">
+    </div>
 </head>
 
 <body>
-
-<div id="header">
-            <h1>Create New Club</h1>
-
-        </div>
-
-        <div id="headericon">
-            
-            <img src="/images/Groop_icon.png" height="100px", width="100px">
-
-        </div>
-
-    </div>
-
-
 <div id = "profilecontent" >
     <div class="profilebox1 article">
-<fieldset>
-	<form action="">
+        <fieldset>
+	       <form>
             <p><u>Please input your basic information</u></p>
-                <p>
+            <div class="form-group">
 
-                    <label>Club Name :
-                    </label>
-                    <input type="text" class="long"/>
-                </p>
+                <label>Club Name :
+                </label>
+                <input type="text" class="long"/>
+            </div>
 
-                <p>
-                    <label>Abbreviation :
-                    </label>
-                    <input type="text" class="long"/>
-                </p>
+            <div class="form-group">
+                <label>Abbreviation :
+                </label>
+                <input type="text" class="long"/>
+            </div>
+            <div class="form-group">
+                <label>School :
+                </label>
+                <input type="text" class="long"/>
+            </div>
+            <div class="form-group">
+                <label>Description :</label>
+                <textarea id = "clubdescription"></textarea>
+            </div>
+            <div class="form-group">
+                <label class="optional">Website :
+                </label>
+                <input class="long" type="text" value="http://"/>
+            </div>
+            <div class="form-group">
+                <label>Phone :
+                </label>
+                <input type="text" maxlength="10"/>
+            </div>
+            <div class="form-group">
+                <label>Email :
+                </label>
+                <input type="text" maxlength="10"/>
+            </div>
+            <div class="form-group">
+                <label class="optional">President :
+                </label>
+                <input type="text" class="long"/>
+            </div>
+            </form>
+        </fieldset>
+        
+        
+    </div> 
 
-                <p>
-                    <label>School :
-                    </label>
-                    <input type="text" class="long"/>
-                </p>
-
-                <p>
-                    <label>Description :
-                    </label>
-                    <textarea cols="50" rows="10">
-                    </textarea>
-                </p>
-
-                 <p>
-                    <label class="optional">Website :
-                    </label>
-                    <input class="long" type="text" value="http://"/>
-
-                </p>
-
-                 <p>
-                    <label>Phone :
-                    </label>
-                    <input type="text" maxlength="10"/>
-                </p>
-
-                 <p>
-                    <label>Email :
-                    </label>
-                    <input type="text" maxlength="10"/>
-                </p>
-
-                 <p>
-                    <label class="optional">President :
-                    </label>
-                    <input type="text" class="long"/>
-                </p>
-</fieldset>
-</div> 
-
- <div id="Profile_picture" class="profilebox2 article">
-            <fieldset>
-				<form name="form0" id="form0" >
-                <img src="/images/Text logo.png" id="img0", height="230", width="400" ><br>
-                <input type="file" name="file0" id="file0" multiple="multiple" />
-				
-				
-				</form>
-            </fieldset>
-</div>
-
-
-
-</div>s
-<div id = "section" class="" >
-    <div id="footbutton" class="">
-            <button><a href="/profile" class="groopbutton" >Confirm</a></button>
+    <div id="Profile_picture" class="profilebox2 article">
+        <fieldset>
+			<form name="form0" id="form0" >
+            <img src="/images/Text logo.png" id="img0", height="230", width="400" ><br>
+            <input type="file" name="file0" id="file0" multiple="multiple" />
+			</form>
+        </fieldset>
     </div>
-    <div id="footbutton" class="">
-            <button><a href="/signup" class="groopbutton" >Cancel</a></button>
-    </div>
-    
+    <ul class="tab" style="border: none;background: none; padding-top: 270px; width: 100%">
+        <li><button href="/profile" class="groopbutton">Confirm</button></li>
+        <li><button href="/profile" class="groopbutton">Cancle</button></li>
+    </ul>
 </div>
-            <script type="text/javascript" src="page2_3/uploadphoto.js"></script>  
+<script type="text/javascript" src="page2_3/uploadphoto.js"></script>  
 </body>
 </html>
