@@ -7,7 +7,7 @@ body
 	font-weight: bold;
 	margin: 0 auto;
 	width: 800px;
-	width: 65%;
+	/*width: 65%;*/
 
   box-sizing: border-box;
 }
@@ -164,11 +164,21 @@ ul.tab li a:focus, .active {
 	margin-right: 1%;
 }
 
+/*Buttons section for create club page*/
+#section {
+    width:350px;
+    clear: both;
+    padding:10px; 
+    padding-top: 35%;
+
+}
+
 #footbutton{
 	width: 48%;
 	float: left;
 	margin:1%;
 	text-align: center;
+	display: inline-block;
 }
 
 .article {
