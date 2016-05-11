@@ -2,98 +2,116 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <title>Node Authentication</title>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
-    <style>
-        body        { padding-top:80px; }
-    </style>
 
+        
+
+    
+    <!--link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
+    <!--link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+    <!--style>
+        body        { padding-top:80px; }
+    </style-->
+    <link rel="stylesheet" href="/stylesheets/style.css">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link rel="stylesheet" type="text/css" href="page2_3/css/default.css"/>
+    <!--link rel="stylesheet" type="text/css" href="page2_3/css/default.css"/-->
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<!--<script src="http://www.codefans.net/ajaxjs/jquery-1.6.2.min.js"></script>-->
     <script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
 </head>
+
 <body>
-	<form action="" class="register">
-            <h2>Create New Club</h2>
-            <fieldset class="row1">
-                <legend>Club Details
-                </legend>
+
+<div id="header">
+            <h1>Create New Club</h1>
+
+        </div>
+
+        <div id="headericon">
+            
+            <img src="/images/Groop_icon.png" height="100px", width="100px">
+
+        </div>
+
+    </div>
+
+
+<div id = "profilecontent" >
+    <div class="profilebox1 article">
+<fieldset>
+	<form action="">
+            <p><u>Please input your basic information</u></p>
                 <p>
-                    <label>Name *
+
+                    <label>Club Name :
                     </label>
                     <input type="text" class="long"/>
                 </p>
+
                 <p>
-                    <label>Street Number *
+                    <label>Abbreviation :
                     </label>
                     <input type="text" class="long"/>
                 </p>
+
                 <p>
-                    <label>Street Name *
+                    <label>School :
                     </label>
                     <input type="text" class="long"/>
                 </p>
+
                 <p>
-                    <label>City *
+                    <label>Description :
                     </label>
-                    <input type="text" class="long"/>
+                    <textarea cols="50" rows="10">
+                    </textarea>
                 </p>
-                <p>
-                    <label>Country *
-                    </label>
-                    <select>
-                        <option>
-                        </option>
-                        <option value="1">Canada
-                        <option value="2">China
-                        </option>
-                    </select>
-                </p>
-                <label class="obinfo">* obligatory fields
-                </label>
-            </fieldset>
-            <fieldset class="row2">
-                <legend>Further Information
-                </legend>
+
                  <p>
-                    <label class="optional">Website
+                    <label class="optional">Website :
                     </label>
                     <input class="long" type="text" value="http://"/>
 
                 </p>
+
                  <p>
-                    <label>Phone *
+                    <label>Phone :
                     </label>
                     <input type="text" maxlength="10"/>
                 </p>
+
                  <p>
-                    <label>Email *
+                    <label>Email :
                     </label>
                     <input type="text" maxlength="10"/>
                 </p>
+
                  <p>
-                    <label class="optional">President
+                    <label class="optional">President :
                     </label>
                     <input type="text" class="long"/>
                 </p>
-            </fieldset>
-            <fieldset class="row2"> 
-                <h2>Club logo</h2>
-            	<p>JPG or GIF only</p>
+</fieldset>
+</div> 
+
+ <div id="Profile_picture" class="profilebox2 article">
+            <fieldset>
 				<form name="form0" id="form0" >
-                <img src="" id="img0", height="170", width="170" ><br>
+                <img src="/images/Text logo.png" id="img0", height="230", width="400" ><br>
                 <input type="file" name="file0" id="file0" multiple="multiple" />
 				
 				
 				</form>
             </fieldset>
-            <div>
-            	<a href="/profile" class="btn btn-default"><span class="fa fa-user"></span>Save Club</a>
-            	<a href="/signup" class="btn btn-default"><span class="fa fa-user"></span>Cancel</a>
-            </div>
+</div>
+
+    <div id="footbutton" class="">
+            <button><a href="/profile" class="groopbutton" >Confirm</a></button>
+    </div>
+    <div id="footbutton" class="">
+            <button><a href="/signup" class="groopbutton" >Cancel</a></button>
+    </div>
+
+</div>
             <script type="text/javascript" src="page2_3/uploadphoto.js"></script>  
 </body>
 </html>

@@ -18,17 +18,6 @@ function createtimeline1(){
   data.addColumn('datetime', 'end');
   data.addColumn('string', 'content');
 
-/*            data.addRows([
-      [new Date(2010,7,23), , '<div>Conversation</div><img src="img/comments-icon.png" style="width:32px; height:32px;">'],
-      [new Date(2010,7,23,23,0,0), , '<div>Mail from boss</div><img src="img/mail-icon.png" style="width:32px; height:32px;">'],
-      [new Date(2010,7,24,16,0,0), , 'Report'],
-      [new Date(2010,7,26), new Date(2010,8,2), 'Traject A'],
-      [new Date(2010,7,28), , '<div>Memo</div><img src="img/notes-edit-icon.png" style="width:48px; height:48px;">'],
-      [new Date(2010,7,29), , '<div>Phone call</div><img src="img/Hardware-Mobile-Phone-icon.png" style="width:32px; height:32px;">'],
-      [new Date(2010,7,31), new Date(2010,8,3), 'Traject B'],
-      [new Date(2010,8,4,12,0,0), , '<div>Report</div><img src="img/attachment-icon.png" style="width:32px; height:32px;">']
-  ]);*/
-
   // specify options
   var options = {
     'width':  "100%",
