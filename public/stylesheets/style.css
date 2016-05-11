@@ -106,13 +106,8 @@ ul.tab li a:focus, .active {
 /*Style the profile page */
 
 #profilecontainer{
-	 
-	
 	overflow: auto;
-	min-width: 50%;
-
-   
-
+	/*min-width: 50%;*/
 }
 
 #footbutton, #header{
@@ -152,13 +147,18 @@ ul.tab li a:focus, .active {
 }
 
 
-.profilebox1, .profilebox2, .profilebox3{
-	width: 48%;
+.profilebox1, .profilebox3{
+	width: 60%;
 	float: left;
 	margin:1%;
 	padding-bottom: 1%;
-	
+}
 
+.profilebox2{
+	width: 30%;
+	float: left;
+	margin:1%;
+	padding-bottom: 1%;
 }
 .profilebox3{
 	margin-right: 1%;
@@ -183,9 +183,28 @@ ul.tab li a:focus, .active {
 	padding: 5px 10%;
 	margin-bottom: 10px;
 	display : block;
+	overflow: auto;
+	overflow-y:hidden;
+	white-space: nowrap;
 }
 
 .form-group input{
+	padding: 5px 5px;
+	display : inline-block;
+	width : 60%;
+	float : right;
+}
+
+#clubdescription{
+	padding: 5px 5px;
+	width : 60%;
+	float : right;
+	height: 50px;
+	overflow: auto;
+
+}
+
+.form-group select{
 	padding: 5px 5px;
 	width : 70%;
 	float : right;
@@ -195,6 +214,8 @@ ul.tab li a:focus, .active {
 .form-group label{
 	/*display : inline-block;*/
 	padding-top: 10px;
+	clear: right;
+	width: 100px;
 }
 
 /* Style for time line*/
