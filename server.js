@@ -19,10 +19,10 @@ var path = require('path');
 
 var mysql        = require("mysql");
 var con = mysql.createConnection({
-	host: "127.0.0.1",
-	user: "root",
-	password: "11235813",
-	database: "users",
+  host: "localhost",
+  user: "root",
+  password: "11235813",
+  database: "users",
   port:"3306"
 });
 

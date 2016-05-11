@@ -5,11 +5,16 @@ body
 	font-style: normal;
 	font-variant: normal;
 	font-weight: bold;
+	margin: 0 auto;
+	width: 800px;
+	/*width: 65%;*/
+
+  box-sizing: border-box;
 }
 
 /*this is the style for EVERY BUTTON in EVERY PAGE*/
 .groopbutton{
-	background-color: #33B2A6;
+	background-color: #33B2A6; 
 	color : white;
 	border-radius: 25px;
 	width : 100px;
@@ -98,14 +103,118 @@ ul.tab li a:focus, .active {
     margin-right: auto;
 }
 
-/*style for input box and labels*/
+/*Style the profile page */
+
+#profilecontainer{
+	overflow: auto;
+	/*min-width: 50%;*/
+}
+
+#footbutton, #header{
+	margin:1%;
+}
+
+#header{
+	width: 76%;
+	/*background-color: #efefef;*/
+	float: left;
+	margin: 1%;
+	padding-top: 10%;
+	text-align: left;
+	font-size: 30px;
+}
+
+#header2{
+	width: 48%;
+	/*background-color: #efefef;*/
+	float: left;
+	margin: 1%;
+	text-align: center;
+}
+
+#headericon{
+	width: 20%;
+	float: left;
+	padding-top: 13%;
+	text-align: right;
+}
+
+#headericon2{
+	width: 48%;
+	float: left;
+	margin: 1%;
+	text-align: right;
+}
+
+
+.profilebox1, .profilebox3{
+	width: 60%;
+	float: left;
+	margin:1%;
+	padding-bottom: 1%;
+}
+
+.profilebox2{
+	width: 30%;
+	float: left;
+	margin:1%;
+	padding-bottom: 1%;
+}
+.profilebox3{
+	margin-right: 1%;
+}
+
+/*Buttons section for create club page*/
+#section {
+    width:350px;
+    clear: both;
+    padding:10px; 
+    padding-top: 35%;
+
+}
+
+#footbutton{
+	width: 48%;
+	float: left;
+	margin:1%;
+	text-align: center;
+	display: inline-block;
+}
+
+.article {
+	height: 15em;
+	margin-bottom: 1em;
+}
+.article2{
+	height: 31em;
+	margin-bottom: 1em;
+}
 .form-group{
 	padding: 5px 10%;
 	margin-bottom: 10px;
 	display : block;
+	overflow: auto;
+	overflow-y:hidden;
+	white-space: nowrap;
 }
 
 .form-group input{
+	padding: 5px 5px;
+	display : inline-block;
+	width : 60%;
+	float : right;
+}
+
+#clubdescription{
+	padding: 5px 5px;
+	width : 60%;
+	float : right;
+	height: 50px;
+	overflow: auto;
+
+}
+
+.form-group select{
 	padding: 5px 5px;
 	width : 70%;
 	float : right;
@@ -115,6 +224,8 @@ ul.tab li a:focus, .active {
 .form-group label{
 	/*display : inline-block;*/
 	padding-top: 10px;
+	clear: right;
+	width: 100px;
 }
 
 /* Style for time line*/
