@@ -7,6 +7,7 @@ body
 	font-weight: bold;
 	margin: 0 auto;
 	width: 800px;
+	width: 65%;
 
   box-sizing: border-box;
 }
@@ -126,31 +127,34 @@ ul.tab li a:focus, .active {
 	padding-top: 10%;
 	text-align: left;
 	font-size: 30px;
+}
 
-
-
+#header2{
+	width: 48%;
+	/*background-color: #efefef;*/
+	float: left;
+	margin: 1%;
+	text-align: center;
 }
 
 #headericon{
 	width: 20%;
-	/*background-color: #efefef;*/
 	float: left;
 	padding-top: 13%;
-	margin: 1%;
 	text-align: right;
-	
-
-
-
 }
 
+#headericon2{
+	width: 48%;
+	float: left;
+	margin: 1%;
+	text-align: right;
+}
 
 
 .profilebox1, .profilebox2, .profilebox3{
 	width: 48%;
 	float: left;
-	/*background-color: #efefef; */
-	
 	margin:1%;
 	padding-bottom: 1%;
 	
@@ -160,25 +164,21 @@ ul.tab li a:focus, .active {
 	margin-right: 1%;
 }
 
-
-
-
 #footbutton{
 	width: 48%;
 	float: left;
 	margin:1%;
 	text-align: center;
-
 }
 
 .article {
-				height: 15em;
-				margin-bottom: 1em;
-				/*background-color: #efefef; */}
-
-
-
-/*style for input box and labels*/
+	height: 15em;
+	margin-bottom: 1em;
+}
+.article2{
+	height: 31em;
+	margin-bottom: 1em;
+}
 .form-group{
 	padding: 5px 10%;
 	margin-bottom: 10px;
