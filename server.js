@@ -22,7 +22,7 @@ var con = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "11235813",
-  database: "users",
+  database: "mydb",
   port:"3306"
 });
 
@@ -70,6 +70,7 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 
 // routes ======================================================================
 require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
+require('./app/insert_profile.js')(app); // 
 //require('./app/eventData.js')(app);
 // launch ======================================================================
 app.listen(port);
