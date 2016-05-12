@@ -52,7 +52,7 @@ IMG.displayed_left {
 /* Style the tabs */
 ul.tab {
     list-style-type: none;
-    width : 50%;
+    width : 100%;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 0;
@@ -95,7 +95,7 @@ ul.tab li a:focus, .active {
 /* Style the tab content */
 .tabcontent {
     display: none;
-    width : 50%;
+    width : 100%;
     padding: 30px 0px 10px 0px;
     border: 1px solid #ccc;
     border-top: none;
@@ -193,9 +193,9 @@ ul.tab li a:focus, .active {
 	padding: 5px 10%;
 	margin-bottom: 10px;
 	display : block;
-	overflow: auto;
+/*	overflow: auto;
 	overflow-y:hidden;
-	white-space: nowrap;
+	white-space: nowrap;*/
 }
 
 .form-group input{

@@ -17,20 +17,20 @@
 <div id = "profilecontent"  >
     <div class="profilebox1 article">
     <fieldset style="height: 250px">
-    <form>
+    <form action="/signup_profile" method="post">
         <p><u>Please input your basic information</u></p>
         <div class="form-group">
             <label>Name :</label>
-            <input type="text" class="long"/>
+            <input type="text" class="long" name = "Name">
         </div> 
         <div class="form-group">
             <label>College :</label>
-            <input type="text" maxlength="10"/>
+            <input type="text" maxlength="10" name = "College">
         </div> 
         <div class="form-group">
             <label>Club :</label>
             <select>
-                <option>
+                <option name = "Club_Name">
                 </option>
                 <option value="1">Club 1
                 <option value="2">Club 2
@@ -43,7 +43,7 @@
         <div class="form-group">
             <label>Role :</label>
             <select>
-                <option>
+                <option name = "Club_Role">
                 </option>
                 <option value="1">President
                 <option value="2">VP
@@ -53,9 +53,10 @@
                 </option>
             </select>
         </div> 
+        <button type="submit" class="groopbutton" style = "margin-top:20px">Confirm</button>
     </form>
     </fieldset>
-    <button href="/signup_create_club" class="groopbutton" style = "margin-top:20px">Confirm</button>
+    
 </div> 
 
 <div id="Profile_picture" class="profilebox2 article">

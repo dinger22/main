@@ -16,49 +16,50 @@
 <div id = "profilecontent" >
     <div class="profilebox1 article">
         <fieldset>
-	       <form>
+	       <form action="/signup_create_club" method="post">
             <p><u>Please input your basic information</u></p>
             <div class="form-group">
 
                 <label>Club Name :
                 </label>
-                <input type="text" class="long"/>
+                <input type="text" class="long" name = "Club_Name">
             </div>
 
             <div class="form-group">
                 <label>Abbreviation :
                 </label>
-                <input type="text" class="long"/>
+                <input type="text" class="long" name = "Abbreviation">
             </div>
             <div class="form-group">
                 <label>School :
                 </label>
-                <input type="text" class="long"/>
+                <input type="text" class="long" name = "School">
             </div>
             <div class="form-group">
                 <label>Description :</label>
-                <textarea id = "clubdescription"></textarea>
+                <textarea id = "clubdescription" name = "Description"></textarea>
             </div>
             <div class="form-group">
                 <label class="optional">Website :
                 </label>
-                <input class="long" type="text" value="http://"/>
+                <input class="long" type="text" value="http://" name = "Website">
             </div>
             <div class="form-group">
                 <label>Phone :
                 </label>
-                <input type="text" maxlength="10"/>
+                <input type="text" maxlength="10" name = "Phone">
             </div>
             <div class="form-group">
                 <label>Email :
                 </label>
-                <input type="text" maxlength="10"/>
+                <input type="text" maxlength="10" name = "Email">
             </div>
             <div class="form-group">
                 <label class="optional">President :
                 </label>
-                <input type="text" class="long"/>
+                <input type="text" class="long" name = "President">
             </div>
+            <li><button type="submit" class="groopbutton">Confirm</button></li>
             </form>
         </fieldset>
         
@@ -74,7 +75,7 @@
         </fieldset>
     </div>
     <ul class="tab" style="border: none;background: none; padding-top: 270px; width: 100%">
-        <li><button href="/profile" class="groopbutton">Confirm</button></li>
+        
         <li><button href="/profile" class="groopbutton">Cancle</button></li>
     </ul>
 </div>
