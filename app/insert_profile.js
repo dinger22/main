@@ -54,8 +54,8 @@ module.exports = function(app) {
                 console.log(err);
             if (rows.length) {
                 console.log("name taken");
-            } else {
-
+            } 
+            else {
                 // if there is no user with that email
                 // create the user
                 var newClub = new Object();
@@ -75,9 +75,9 @@ module.exports = function(app) {
                     if (err){
                         console.log("club error");
                     }else{
-                                res.render('profile.ejs',{
-            user : req.user //get the user information 
-        }); 
+                        res.render('profile.ejs',{
+                            user : req.user //get the user information 
+                        }); 
                     }
 
                 }); 

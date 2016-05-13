@@ -29,22 +29,22 @@
   <div id="dialog-form-task">
     <form action="/event_planning" method="post">
         <fieldset class="form-group" style="overflow: auto; border : none;" >
-          <input type="text" name="title_p" id="title_p" class="text ui-widget-content ui-corner-all" style="text-align : center; margin-bottom:12px; width:95%; border:1px;padding: .4em;">
-          <textarea name="title" id="title" class="text ui-widget-content ui-corner-all" style="margin-bottom:12px; width:95%; height : 100px; padding: .4em;"></textarea>
+          <input type="text" name="Task_name" id="title_p" class="text ui-widget-content ui-corner-all" style="text-align : center; margin-bottom:12px; width:95%; border:1px;padding: .4em;">
+          <textarea type="text"  name = "Description" id="title" class="text ui-widget-content ui-corner-all" style="margin-bottom:12px; width:95%; height : 100px; padding: .4em;"></textarea>
           <div class="form-group" style = "padding: 5px 0px;">
             <label>Assign to</label>
-            <input type="text" name="asignee" id="asignee" class="text ui-widget-content ui-corner-all" style="float : right; width:50%;">
+            <input type="text" name="Asignee" id="asignee" class="text ui-widget-content ui-corner-all" style="float : right; width:50%;">
           </div>
           <div class="form-group" style = "padding: 5px 0px;">
             <label style = "clear:right">Due Date</label>
-            <input type="date" name="duedate" style="float : right; width:50%;">                
+            <input type="date" name="Due_date" style="float : right; width:50%;">                
           </div>
           <div class="form-group" style = "padding: 5px 0px;">
             <label style = "clear:right">End Time</label>
             <input type="time" name="end_time" style="float : right; width:50%;">                
           </div>
         </fieldset>
-      <!-- <button type="submit" class="btn btn-warning btn-lg">Confirm</button> -->
+      <button type="submit" class="btn btn-warning btn-lg">Confirm</button>
     </form>  
   </div>
 

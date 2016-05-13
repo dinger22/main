@@ -1,41 +1,85 @@
 // app/routes.js
+var mysql        = require("mysql");
+var connection  = mysql.createConnection({
+    host: "127.0.0.1",
+    user: "root",
+    password: "11235813",
+    database: "mydb"
+});
+
 module.exports = function(app, passport) {
 
     // =====================================
     // Event Planning (with timeline) ========
     // =====================================
     app.get('/event_planning', function(req, res) {
-        res.render('event_planning.ejs'); // load the index.ejs file
+        var tasks_list;
+        connection.query("select * from tasks where Events_idEvents = 1" ,function(err,rows){
+            console.log(rows);
+            console.log("above row object");
+            if (err)
+                console.log("error tasks");
+            if (rows.length) {
+                tasks_list = rows;
+                console.log("no such event");
+            }else{
+                tasks_list = rows;
+            }  
+        });
+        res.render('event_planning.ejs',{
+            tasks : tasks_list //get the user information 
+        });
     });
     app.post('/event_planning', function(req, res){
 
-        var mysql        = require("mysql");
-        var connection  = mysql.createConnection({
-            host: "aa4spqyqzp9zds.ctrhjjzjrs0h.us-west-2.rds.amazonaws.com",
-            user: "dingy22",
-            password: "11235813",
-            database: "test"
-        });
-        connection.query("UPDATE users SET data = ? Where email = 'test6@test.com'",[req.body.title],function(err){
-            if(err){
-                console.log("baaaaaaaaaaaaaaaaaaaaaaaaaaad");
-                res.status(500).end();
-                return;
-            }
-            console.log("gooooooooooooooooooooood");
-            res.render('event_planning.ejs');
-            return;
-        });
-        connection.end(function(err) {
-          if(err){
-            console.log('Error terminate Db ');
-            return;
-          }
-          console.log('Connection terminate');
-          return;
-          // The connection is terminated gracefully
-          // Ensures all previously enqueued queries are still
-          // before sending a COM_QUIT packet to the MySQL server.
+
+        connection.query("SELECT * FROM tasks WHERE Task_name = '"+req.body.Task_name+"'",function(err,rows){
+            console.log(rows);
+            console.log("above row object");
+            if (err)
+                console.log(err);
+            if (rows.length) {
+                console.log("name taken");
+            } 
+            else {
+                // if there is no user with that name
+                // create the task
+                var newTask = new Object();
+                
+                newTask.Task_name    = req.body.Task_name;
+                newTask.Description    = req.body.Description;
+                newTask.Asignee    = req.body.Asignee;
+                newTask.Due_date    = req.body.Due_date;
+                 // use the generateHash function in our user model
+                var insertQuery = "INSERT INTO tasks ( Description, Events_idEvents,Organizer_team_idOrganizer,Task_name, Assignee, Due_date) VALUES ('" + newTask.Description + "','" + 1 +"','"+ 1 +"','"+ req.body.Task_name  +"','"+ req.body.Asignee +"','"+ req.body.Due_date +"')";
+                connection.query(insertQuery,function(err,rows){
+                    //newUserMysql.idClub = rows.insertId;
+                    if (err){
+                        console.log(err);
+                        console.log("task error");
+                    }else{
+                        res.status(200).end();
+/*                        res.render('profile.ejs',{
+                            user : req.user //get the user information 
+                        }); */
+                    }
+
+                }); 
+/*                connection.query("UPDATE tasks SET Desc = ?",[newTask.Desc],function(err){
+                    if(err){
+                        console.log(err);
+                        console.log("task error");
+                        res.status(500).end();
+                        return;
+                    }
+                    console.log("gooooooooooooooooooooood");
+                    if (!req.body.Club_Name){
+                        res.render('signup_create_club.ejs');
+                    }else{
+                        res.status(200).end();
+                    }
+                });*/
+            }   
         });
         
     });
