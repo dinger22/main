@@ -1,11 +1,11 @@
-if (message == 'That email is already taken.'){
+/*if (message == 'That email is already taken.'){
     tabcontent = document.getElementsByClassName("tabcontent");
     tabcontent[0].style.display = "none";
     tabcontent[1].style.display = "block";
     tablinks = document.getElementsByClassName("tablinks");
     tablinks[0].className = tablinks[0].className.replace(" active", "");
     tablinks[1].className += " active";
-}
+}*/
 
 function Login_or_Signup(evt, action) {
     // Declare all variables

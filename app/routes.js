@@ -93,27 +93,16 @@ module.exports = function(app, passport) {
     // process the signup form
     app.post('/signup', passport.authenticate('local-signup', {
         successRedirect : '/signup_profile', // redirect to the secure profile section
-        // failureRedirect : '/index', // redirect back to the signup page if there is an error
+        failureRedirect : '/index', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
     }));
 
-    // =====================================
-    // Sign Up create club(fill in club info page)=======
-    // =====================================
-    // show the signup form
-    app.get('/signup_create_club', function(req, res) {
-        // render the page and pass in any flash data if it exists
-        res.render('signup_create_club.ejs');
-    });
 
-    // =====================================
-    // Sign Up profile(fill in profile page)=======
-    // =====================================
-    // show the signup form
-    app.get('/signup_profile', function(req, res) {
-        // render the page and pass in any flash data if it exists
-        res.render('signup_profile.ejs');
-    });
+
+
+
+
+    
 
     // =====================================
     // LOGOUT ==============================
