@@ -12,27 +12,66 @@ module.exports = function(app, passport) {
     // =====================================
     // Event Planning (with timeline) ========
     // =====================================
+    function get_data(){
+
+    }
     app.get('/event_planning', function(req, res) {
         var tasks_list;
-        connection.query("select * from tasks where Events_idEvents = 1" ,function(err,rows){
-            console.log(rows);
+        var load_event_number = parseInt(req.url.slice(-1));
+        connection.query("SELECT * FROM tasks where Events_idEvents = ?",[load_event_number] ,function(err,rows1){
+            console.log(rows1);
             console.log("above row object");
-            if (err)
-                console.log("error tasks");
-            if (rows.length) {
-                tasks_list = rows;
-                console.log("no such event");
-            }else{
-                tasks_list = rows;
-            }  
+            if (err){
+                console.log("row1");
+                return;
+            }
+            if (rows1.length) {
+                var l_task = rows1.length;
+                var ex_tasks_id = [],
+                    ex_tasks_content = [],
+                    ex_tasks_time = [];
+                for (var index = 0; index < l_task; index++) {
+                    ex_tasks_id.push(rows1[index].idTasks.toString());
+                    ex_tasks_content.push(rows1[index].Task_name.toString());
+                    ex_tasks_time.push(rows1[index].Due_date.toString());
+                }
+                ex_tasks_id = ex_tasks_id.toString();
+                ex_tasks_content = ex_tasks_content.toString();
+                ex_tasks_time = ex_tasks_time.toString();
+            }
+            console.log(rows1);
+            connection.query("SELECT * FROM expense where Events_idEvents = 1" ,function(err,rows2){
+                if (err){
+                    console.log("error tasks");
+                    return;
+                }
+                if (rows2.length) {
+                var l_pay = rows2.length;
+                var ex_pay_id = [],
+                    ex_pay_entry = [],
+                    ex_pay_time = [];
+                for (var index = 0; index < l_pay; index++) {
+                    ex_pay_id.push(rows2[index].idAccounting.toString());
+                    ex_pay_entry.push(rows2[index].Entry_name.toString());
+                    ex_pay_time.push(rows2[index].DateTime.toString());
+                }
+                ex_pay_id = ex_pay_id.toString();
+                ex_pay_entry = ex_pay_entry.toString();
+                ex_pay_time = ex_pay_time.toString();
+                res.render('event_planning.ejs',{
+                    ex_tasks_id : ex_tasks_id,
+                    ex_tasks_content : ex_tasks_content,
+                    ex_tasks_time : ex_tasks_time, //get the user information 
+                    ex_pay_id : ex_pay_id,
+                    ex_pay_entry : ex_pay_entry,
+                    ex_pay_time : ex_pay_time //get the user information 
+                });
+            }
+            });
         });
-        res.render('event_planning.ejs',{
-            tasks : tasks_list //get the user information 
-        });
+
     });
     app.post('/event_planning', function(req, res){
-
-
         connection.query("SELECT * FROM tasks WHERE Task_name = '"+req.body.Task_name+"'",function(err,rows){
             console.log(rows);
             console.log("above row object");
@@ -58,27 +97,11 @@ module.exports = function(app, passport) {
                         console.log(err);
                         console.log("task error");
                     }else{
-                        res.status(200).end();
-/*                        res.render('profile.ejs',{
-                            user : req.user //get the user information 
-                        }); */
+                        res.writeHead(303, { Location : req.url });
+                        res.end();
                     }
 
                 }); 
-/*                connection.query("UPDATE tasks SET Desc = ?",[newTask.Desc],function(err){
-                    if(err){
-                        console.log(err);
-                        console.log("task error");
-                        res.status(500).end();
-                        return;
-                    }
-                    console.log("gooooooooooooooooooooood");
-                    if (!req.body.Club_Name){
-                        res.render('signup_create_club.ejs');
-                    }else{
-                        res.status(200).end();
-                    }
-                });*/
             }   
         });
         

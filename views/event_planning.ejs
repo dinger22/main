@@ -19,15 +19,23 @@
 </head>
 <body>
   <img class = "displayed_right" src="/images/groop_icon_logo.png" alt="Groop Logo" width="5%" height="5%">
-
-  <div id="mytimeline" class="dropzone noborder-top" ></div>
+  <form action="/event_planning" method="get" id = "get_event">
+    <input type="text" name="event_number" id="event_number">
+    <button onclick="load_event(1)" class="displayed_right btn btn-warning btn-lg">Event 1</button>
+    <button onclick="load_event(2)" class="displayed_right btn btn-warning btn-lg">Event 2</button>
+  <div id="mytimeline" class="displayed_right dropzone noborder-top" ></div>
   <div id="mytimeline2"></div>
+  <script type="text/javascript">
+    var ex_tasks_id = <%- JSON.stringify(ex_tasks_id) %>; 
+    var ex_tasks_content= <%- JSON.stringify(ex_tasks_content) %>; 
+    var ex_tasks_time= <%- JSON.stringify(ex_tasks_time) %>;
+    var ex_pay_id = <%- JSON.stringify(ex_pay_id) %>; 
+    var ex_pay_entry= <%- JSON.stringify(ex_pay_entry) %>; 
+    var ex_pay_time= <%- JSON.stringify(ex_pay_time) %>;  
 
-  
-
-
+  </script>
   <div id="dialog-form-task">
-    <form action="/event_planning" method="post">
+    <form action="/event_planning" method="post" id = "post_form">
         <fieldset class="form-group" style="overflow: auto; border : none;" >
           <input type="text" name="Task_name" id="title_p" class="text ui-widget-content ui-corner-all" style="text-align : center; margin-bottom:12px; width:95%; border:1px;padding: .4em;">
           <textarea type="text"  name = "Description" id="title" class="text ui-widget-content ui-corner-all" style="margin-bottom:12px; width:95%; height : 100px; padding: .4em;"></textarea>
@@ -44,12 +52,14 @@
             <input type="time" name="end_time" style="float : right; width:50%;">                
           </div>
         </fieldset>
-      <button type="submit" class="btn btn-warning btn-lg">Confirm</button>
+      <!-- <button type="submit" class="btn btn-warning btn-lg">Confirm</button> -->
     </form>  
   </div>
 
   <div id="dialog-form-payment">
     <form action="/event_planning" method="post" style=" margin:13%;">
+      <input type="hidden" name="pay_time" id="pay_time">
+      <input type="text" name="Task_name" id="title_pay" class="text ui-widget-content ui-corner-all" style="text-align : center; margin-bottom:12px; width:95%; border:1px;padding: .4em;">
       <div class="column" draggable="false" >
           <img class = "displayed_left" src="/images/persona.png" alt="New Task" width="80" height="80" >
           <label style="padding-left: 7px">Name</label>
@@ -63,7 +73,7 @@
             </div>  
         </div>  
       </fieldset>
-      <!-- <button type="submit" class="btn btn-warning btn-lg">Confirm</button> -->
+      <button type="submit" class="btn btn-warning btn-lg">Confirm</button>
     </form>
   </div>
 

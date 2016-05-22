@@ -58,6 +58,8 @@
  * Declare a unique namespace for CHAP's Common Hybrid Visualisation Library,
  * "links"
  */
+
+
 if (typeof links === 'undefined') {
     links = {};
     // important: do not use var, as "var links = {};" will overwrite

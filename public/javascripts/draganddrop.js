@@ -10,6 +10,31 @@ google.load("visualization", "1");
 // Set callback to run when API is loaded
 google.setOnLoadCallback(drawVisualization);
 
+function load_event(eventnumber){
+  var get_event_form = document.getElementById('get_event');
+  var event_number = document.getElementById('event_number');
+  event_number.value = eventnumber;
+  get_event_form.submit();
+}
+
+function getMonthFromString(mon){
+
+   var d = Date.parse(mon + "1, 2012");
+   if(!isNaN(d)){
+      return new Date(d).getMonth() + 1;
+   }
+   return -1;
+ }
+
+function time_string_to_date(date){
+  var month, date, year;
+  var date_arr = date.split(" ");
+  year = parseInt(date_arr[3]);
+  month = getMonthFromString(date_arr[1])-1;
+  date = parseInt(date_arr[2]);
+  return new Date(year,month,date);
+}
+
 // Called when the Visualization API is loaded.
 function createtimeline1(){
   // Create and populate a data table.
@@ -17,6 +42,25 @@ function createtimeline1(){
   data.addColumn('datetime', 'start');
   data.addColumn('datetime', 'end');
   data.addColumn('string', 'content');
+
+
+  var l_task = ex_tasks_id.split(",").length; 
+  var data_content = ex_tasks_content.split(",");
+  var tasks_time =ex_tasks_time.split(",");
+  for (var i = 0; i < l_task; i++) {
+    var newDate = time_string_to_date(tasks_time[i]);
+    var content = "<img src='/images/task-undone-outline.png' style='width:16px; height:16px;float:left'>"+data_content[i];
+    data.addRow([ newDate, ,content]);
+  }
+
+  var l_pay = ex_pay_id.split(",").length; 
+  var pay_entry = ex_pay_entry.split(",");
+  var pay_time =ex_pay_time.split(",");
+  for (var i = 0; i < l_pay; i++) {
+    var newDate = time_string_to_date(pay_time[i]);
+    var content = "<img src='/images/payment.png' style='width:16px; height:16px;float:left'>"+pay_entry[i];
+    data.addRow([ newDate, ,content]);
+  }
 
   // specify options
   var options = {
@@ -75,13 +119,13 @@ function createtimeline1(){
   google.visualization.events.addListener(tl1, 'editEvent', editEvent);
   // Draw our tl1 with the created data and options
   tl1.draw(data);
+  tl1.setVisibleChartRangeNow();
 }
 
 function createtimeline2(){
     // Create and populate a data table.
   data2 = new google.visualization.DataTable();
   data2.addColumn('datetime', 'start');
-  data2.addColumn('datetime', 'end');
   data2.addColumn('string', 'content');
 
   // specify options
@@ -103,6 +147,7 @@ function createtimeline2(){
   google.visualization.events.addListener(tl2, 'complete', oncomplete2);
   // Draw our tl1 with the created data and options
   tl2.draw(data2);
+  onrangechange1();
 }
 
 function drawVisualization() {
@@ -149,8 +194,9 @@ function getPosition(){
 $(function(){
   var title = $("#title"),
     title_p = $("#title_p"),
+    title_pay = $("#title_pay"),
     asignee = $("#asignee"),
-    allFields = $( [] ).add( title ).add( asignee );
+    allFields = $( [] ).add( title ).add( asignee ).add(title_p);
 
   $("#dialog-form-task").dialog({
     autoOpen: false,
@@ -159,6 +205,7 @@ $(function(){
     modal: true,
     buttons:{
       "Confirm": function(){
+
         addTask(title);
         tl1.eventParams.itemIndex = (tl1.items.length - 1);
         tl1.selectItem(tl1.eventParams.itemIndex);
@@ -176,6 +223,8 @@ $(function(){
             tl1.deleteItem(tl1.eventParams.itemIndex);
         }
         links.Timeline.preventDefault(event);
+        var post_form = $("#post_form");
+        post_form.submit();
         $( this).dialog( "close" );
         },
       "Cancel": function() {
@@ -195,6 +244,7 @@ $(function(){
     dialogClass: "MyClass",
     buttons:{
       "Confirm": function(){
+        document.getElementById("pay_time").value = eventStart;
         addPayment(title_p);
         tl1.eventParams.itemIndex = (tl1.items.length - 1);
         tl1.selectItem(tl1.eventParams.itemIndex);
@@ -244,7 +294,7 @@ function addTask(title){
 }
 
 function addPayment(title){
-  var content = "<img src='/images/payment.png' style='width:16px; height:16px;float:left'>"+title.val();
+  var content = "<img src='/images/payment.png' style='width:16px; height:16px;float:left'>"+title_pay.value;
   tl1.addItem({
     'start': eventStart,
     'content': content,
