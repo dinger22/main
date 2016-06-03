@@ -6,7 +6,7 @@ body
 	font-variant: normal;
 	font-weight: bold;
 	margin: 0 auto;
-	width: 800px;
+	width: 900px;
 	/*width: 65%;*/
 
   box-sizing: border-box;
@@ -164,6 +164,14 @@ ul.tab li a:focus, .active {
 	margin-right: 1%;
 }
 
+.profilebox4{
+	width: 24%;
+	float: left;
+
+	margin:2%;
+	
+}
+
 /*Buttons section for create club page*/
 #section {
     width:350px;
@@ -237,3 +245,31 @@ ul.tab li a:focus, .active {
 
 
 .mytimeline{position:absolute; width:141px; height:186px; left:31px; top:30px} 
+
+
+
+/* Style for profile page*/
+
+#eventbox1, #eventbox2, #eventbox3{
+	width: 200px;
+	height:80px;
+	border:1px solid #0088DD;
+	margin: 10px;
+}
+
+#eventbox1 p, #eventbox2 p, #eventbox3 p{
+	text-align: center;
+	padding-top: 25px;
+	width:80px;
+	height: 80px;
+	border-right:1px solid #0088DD;
+	float: left;
+
+}
+
+/*right side of events*/	
+#updates{
+	width: 120px;
+	height:80px;
+    float: left;
+}
