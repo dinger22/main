@@ -2153,7 +2153,7 @@ links.Timeline.prototype.repaintDeleteButton = function () {
 
     var index = (this.selection && this.selection.index !== undefined) ? this.selection.index : -1,
         item = (this.selection && this.selection.index !== undefined) ? this.items[index] : undefined;
-    if (item && item.rendered && this.isEditable(item)) {
+    if (item && item.rendered) {
         var right = item.getRight(this),
             top = item.top + item.height;
 
@@ -2191,7 +2191,7 @@ links.Timeline.prototype.repaintCompleteButton = function () {
 
     var index = (this.selection && this.selection.index !== undefined) ? this.selection.index : -1,
         item = (this.selection && this.selection.index !== undefined) ? this.items[index] : undefined;
-    if (item && item.rendered && this.isEditable(item)) {
+    if (item && item.rendered) {
         var right = item.getRight(this),
             top = item.top + item.height;
 
@@ -2230,7 +2230,7 @@ links.Timeline.prototype.repaintEditButton = function () {
 
     var index = (this.selection && this.selection.index !== undefined) ? this.selection.index : -1,
         item = (this.selection && this.selection.index !== undefined) ? this.items[index] : undefined;
-    if (item && item.rendered && this.isEditable(item)) {
+    if (item && item.rendered) {
         var right = item.getRight(this),
             top = item.top + item.height;
 

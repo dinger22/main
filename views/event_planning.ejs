@@ -23,29 +23,40 @@
     <input type="text" name="event_number" id="event_number">
     <button onclick="load_event(1)" class="displayed_right btn btn-warning btn-lg">Event 1</button>
     <button onclick="load_event(2)" class="displayed_right btn btn-warning btn-lg">Event 2</button>
+  </form>  
   <div id="mytimeline" class="displayed_right dropzone noborder-top" ></div>
   <div id="mytimeline2"></div>
   <script type="text/javascript">
     var ex_tasks_id = <%- JSON.stringify(ex_tasks_id) %>; 
     var ex_tasks_content= <%- JSON.stringify(ex_tasks_content) %>; 
     var ex_tasks_time= <%- JSON.stringify(ex_tasks_time) %>;
+    var ex_tasks_Description = <%- JSON.stringify(ex_tasks_Description) %>; 
+    var ex_tasks_Assignee= <%- JSON.stringify(ex_tasks_Assignee) %>; 
+    var ex_tasks_Status = <%- JSON.stringify(ex_tasks_Status) %>;
+
     var ex_pay_id = <%- JSON.stringify(ex_pay_id) %>; 
     var ex_pay_entry= <%- JSON.stringify(ex_pay_entry) %>; 
-    var ex_pay_time= <%- JSON.stringify(ex_pay_time) %>;  
+    var ex_pay_amount= <%- JSON.stringify(ex_pay_amount) %>;
+    var ex_pay_type= <%- JSON.stringify(ex_pay_type) %>; 
+    var ex_pay_time= <%- JSON.stringify(ex_pay_time) %>; 
+    var ex_pay_Status = <%- JSON.stringify(ex_pay_Status) %>;
 
   </script>
+
   <div id="dialog-form-task">
     <form action="/event_planning" method="post" id = "post_form">
         <fieldset class="form-group" style="overflow: auto; border : none;" >
-          <input type="text" name="Task_name" id="title_p" class="text ui-widget-content ui-corner-all" style="text-align : center; margin-bottom:12px; width:95%; border:1px;padding: .4em;">
-          <textarea type="text"  name = "Description" id="title" class="text ui-widget-content ui-corner-all" style="margin-bottom:12px; width:95%; height : 100px; padding: .4em;"></textarea>
+          <input type="hidden" name="eventID">
+          <input type="heidden" name="actionType">
+          <input type="text" name="Task_name" id="title_task" class="text ui-widget-content ui-corner-all" style="text-align : center; margin-bottom:12px; width:95%; border:1px;padding: .4em;">
+          <textarea type="text"  name = "Description" id="Description" class="text ui-widget-content ui-corner-all" style="margin-bottom:12px; width:95%; height : 100px; padding: .4em;"></textarea>
           <div class="form-group" style = "padding: 5px 0px;">
             <label>Assign to</label>
-            <input type="text" name="Asignee" id="asignee" class="text ui-widget-content ui-corner-all" style="float : right; width:50%;">
+            <input type="text" name="Asignee" id="Asignee" class="text ui-widget-content ui-corner-all" style="float : right; width:50%;">
           </div>
           <div class="form-group" style = "padding: 5px 0px;">
             <label style = "clear:right">Due Date</label>
-            <input type="date" name="Due_date" style="float : right; width:50%;">                
+            <input type="date" name="Due_date" id = "Due_date_task" style="float : right; width:50%;">
           </div>
           <div class="form-group" style = "padding: 5px 0px;">
             <label style = "clear:right">End Time</label>
@@ -56,10 +67,35 @@
     </form>  
   </div>
 
+  <div id="dialog-form-edit-task">
+    <form action="/event_planning" method="post" id = "post_edit_form">
+        <fieldset class="form-group" style="overflow: auto; border : none;" >
+          <input type="text" name="Task_name" id="edit_title_task" class="text ui-widget-content ui-corner-all" style="text-align : center; margin-bottom:12px; width:95%; border:1px;padding: .4em;">
+          <textarea type="text"  name = "Description" id="edit_Description" class="text ui-widget-content ui-corner-all" style="margin-bottom:12px; width:95%; height : 100px; padding: .4em;"></textarea>
+          <div class="form-group" style = "padding: 5px 0px;">
+            <label>Assign to</label>
+            <input type="text" name="Asignee" id="edit_Asignee" class="text ui-widget-content ui-corner-all" style="float : right; width:50%;">
+          </div>
+          <div class="form-group" style = "padding: 5px 0px;">
+            <label style = "clear:right">Due Date</label>
+            <input type="date" name="Due_date" id = "edit_Due_date" style="float : right; width:50%;">
+          </div>
+          <div class="form-group" style = "padding: 5px 0px;">
+            <label style = "clear:right">End Time</label>
+            <input type="time" name="end_time" style="float : right; width:50%;">                
+          </div>
+          <input type="hidden" name="taskID" id = "edit_taskID">
+          <input type="hidden" name="actionType" id = "edit_actionType">
+        </fieldset>
+      <!-- <button type="submit" class="btn btn-warning btn-lg">Confirm</button> -->
+    </form>  
+  </div>
+
+
   <div id="dialog-form-payment">
-    <form action="/event_planning" method="post" style=" margin:13%;">
+    <form action="/event_planning" method="post" id = "post_payment_form" style=" margin:13%;">
       <input type="hidden" name="pay_time" id="pay_time">
-      <input type="text" name="Task_name" id="title_pay" class="text ui-widget-content ui-corner-all" style="text-align : center; margin-bottom:12px; width:95%; border:1px;padding: .4em;">
+      <input type="text" name="title_pay" id="title_pay" class="text ui-widget-content ui-corner-all" style="text-align : center; margin-bottom:12px; width:95%; border:1px;padding: .4em;">
       <div class="column" draggable="false" >
           <img class = "displayed_left" src="/images/persona.png" alt="New Task" width="80" height="80" >
           <label style="padding-left: 7px">Name</label>
@@ -73,7 +109,31 @@
             </div>  
         </div>  
       </fieldset>
-      <button type="submit" class="btn btn-warning btn-lg">Confirm</button>
+      <!-- <button type="submit" class="btn btn-warning btn-lg">Confirm</button> -->
+    </form>
+  </div>
+
+
+  <div id="dialog-form-edit-payment">
+    <form action="/event_planning" method="post" id = "post_edit_payment_form" style=" margin:13%;">
+      <input type="hidden" name="pay_time" id="edit_pay_time">
+      <input type="text" name="title_pay" id="edit_title_pay" class="text ui-widget-content ui-corner-all" style="text-align : center; margin-bottom:12px; width:95%; border:1px;padding: .4em;">
+      <div class="column" draggable="false" >
+          <img class = "displayed_left" src="/images/persona.png" alt="New Task" width="80" height="80" >
+          <label style="padding-left: 7px">Name</label>
+      </div>
+      <fieldset class="form-group" style = "border : none">
+        <div>
+            <textarea name="title" id="edit_title" class="text ui-widget-content ui-corner-all" style="margin-bottom:12px; width:95%; height : 100px; padding: .4em;"></textarea>
+            <div class="form-group" style = "padding : 5px 0px;">
+              <label>CAD</label>
+              <input type="number" name="amount" id="edit_amount" style="float : right; width:50%;">
+            </div>  
+        </div>  
+      </fieldset>
+      <input type="hidden" name="payID" id = "edit_payID">
+      <input type="hidden" name="actionType" id = "edit_pay_actionType">
+      <!-- <button type="submit" class="btn btn-warning btn-lg">Confirm</button> -->
     </form>
   </div>
 
