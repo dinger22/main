@@ -27,12 +27,21 @@
         ** jshashtable-2.1.js MUST BE INCLUDED BEFORE THE FRONTIER CALENDAR PLUGIN. ** 
     -->  
     <script type="text/javascript" src="jquery-frontier-calendar/js/lib/jshashtable-2.1.js"></script>  
-    <script type="text/javascript" src="jquery-frontier-calendar/js/frontierCalendar/jquery-frontier-cal-1.3.2.min.js"></script>  
+    <script type="text/javascript" src="jquery-frontier-calendar/js/frontierCalendar/jquery-frontier-cal-1.3.2.js"></script>  
     <link rel="stylesheet" href="/stylesheets/style.css">
 
 </head>
 <body>
-
+  <script type="text/javascript">
+    var ex_event_id = <%- JSON.stringify(ex_event_id) %>; 
+    var ex_event_title= <%- JSON.stringify(ex_event_title) %>; 
+    var ex_event_time= <%- JSON.stringify(ex_event_time) %>;
+    var ex_event_end_time= <%- JSON.stringify(ex_event_end_time) %>;
+    var club_idNum = <%- JSON.stringify(club_idNum) %>;
+    var user_name = <%- JSON.stringify(Display_name) %>;
+    var club_name = <%- JSON.stringify(club_name) %>;
+    var role_name = <%- JSON.stringify(role_name) %>;
+  </script>
 
 <div class="container">
 
@@ -55,33 +64,15 @@
                 
                 <div class="form-group">
             <label>Name :</label>
-            <input type="text" class="long" name = "Name">
+            <input type="text" class="long" name = "Name" id = "user_name">
         </div> 
         <div class="form-group">
             <label>Club :</label>
-            <select>
-                <option name = "Club_Name">
-                </option>
-                <option value="1">Club 1
-                <option value="2">Club 2
-                <option value="3">Club 3
-                <option value="4">Club 4
-                <option value="5">Club 5
-                </option>
-            </select>
+            <input type="text" class="long" name = "Name" id = "club_name">
         </div> 
         <div class="form-group">
             <label>Role :</label>
-            <select>
-                <option name = "Club_Role">
-                </option>
-                <option value="1">President
-                <option value="2">VP
-                <option value="3">director
-                <option value="4">Manager
-                <option value="5">Member
-                </option>
-            </select>
+            <input type="text" class="long" name = "Name" id = "role_name">
         </div> 
 
 
@@ -100,7 +91,7 @@
               
     </div>
   </div>
-                 <p style="float: left; padding-top: 50px;"><img src="/images/Groop_icon.png" height="100px", width="100px"></p>
+         <p style="float: left; padding-top: 50px;"><img src="/images/Groop_icon.png" height="100px", width="100px"></p>
         </div>
 
     </option>
@@ -126,13 +117,10 @@
     <div class="col-sm-4">
             <div class="well">
                <div>Updates since last login:</div>
+               
                <div id="eventbox1">
-    
                <p><a href="/event_planning">Event 1</a></p>
                <div class="Updates">Updates</div>
-
-
-                   
                </div>
 
                <div id="eventbox2">
@@ -227,8 +215,8 @@
                 </tr>
                 <tr>
                     <td>
-                        <label>End Date</label>
-                        <input type="text" name="endDate" id="endDate" value="" class="text ui-widget-content ui-corner-all" style="margin-bottom:12px; width:95%; padding: .4em;"/>                
+<!--                         <label>End Date</label>
+                        <input type="text" name="endDate" id="endDate" value="" class="text ui-widget-content ui-corner-all" style="margin-bottom:12px; width:95%; padding: .4em;"/>   -->              
                     </td>
                     <td>&nbsp;</td>
                     <td>
@@ -268,7 +256,7 @@
                     </td>               
                 </tr>           
             </table>
-            <table>
+<!--             <table>
                 <tr>
                     <td>
                         <label>Background Color</label>
@@ -286,11 +274,125 @@
                         <input type="hidden" id="colorForeground" value="#ffffff">
                     </td>                       
                 </tr>               
-            </table>
+            </table> -->
         </fieldset>
         </form>
     </div>    
-    <div id="display-event-form" title="View Agenda Item"></div>      
+    <div id="display-event-form" title="View Agenda Item">
+        <p class="validateTips">All form fields are required.</p>
+        <form>
+        <fieldset>
+            <label for="name">What?</label>
+            <input type="text" name="what" id="edit_what" class="text ui-widget-content ui-corner-all" style="margin-bottom:12px; width:95%; padding: .4em;"/>
+            <table style="width:100%; padding:5px;">
+                <tr>
+                    <td>
+                        <label>Start Date</label>
+                        <input type="text" name="startDate" id="edit_startDate" value="" class="text ui-widget-content ui-corner-all" style="margin-bottom:12px; width:95%; padding: .4em;"/>                
+                    </td>
+                    <td>&nbsp;</td>
+                    <td>
+                        <label>Start Hour</label>
+                        <select id="edit_startHour" class="text ui-widget-content ui-corner-all" style="margin-bottom:12px; width:95%; padding: .4em;">
+                            <option value="12">12</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                        </select>               
+                    <td>
+                    <td>
+                        <label>Start Minute</label>
+                        <select id="edit_startMin" class="text ui-widget-content ui-corner-all" style="margin-bottom:12px; width:95%; padding: .4em;">
+                            <option value="00" SELECTED>00</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="30">30</option>
+                            <option value="40">40</option>
+                            <option value="50">50</option>
+                        </select>               
+                    <td>
+                    <td>
+                        <label>Start AM/PM</label>
+                        <select id="edit_startMeridiem" class="text ui-widget-content ui-corner-all" style="margin-bottom:12px; width:95%; padding: .4em;">
+                            <option value="AM" SELECTED>AM</option>
+                            <option value="PM">PM</option>
+                        </select>               
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+<!--                         <label>End Date</label>
+                        <input type="text" name="endDate" id="endDate" value="" class="text ui-widget-content ui-corner-all" style="margin-bottom:12px; width:95%; padding: .4em;"/>   -->              
+                    </td>
+                    <td>&nbsp;</td>
+                    <td>
+                        <label>End Hour</label>
+                        <select id="edit_endHour" class="text ui-widget-content ui-corner-all" style="margin-bottom:12px; width:95%; padding: .4em;">
+                            <option value="12" SELECTED>12</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                        </select>               
+                    <td>
+                    <td>
+                        <label>End Minute</label>
+                        <select id="edit_endMin" class="text ui-widget-content ui-corner-all" style="margin-bottom:12px; width:95%; padding: .4em;">
+                            <option value="00" SELECTED>00</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="30">30</option>
+                            <option value="40">40</option>
+                            <option value="50">50</option>
+                        </select>               
+                    <td>
+                    <td>
+                        <label>End AM/PM</label>
+                        <select id="edit_endMeridiem" class="text ui-widget-content ui-corner-all" style="margin-bottom:12px; width:95%; padding: .4em;">
+                            <option value="AM" SELECTED>AM</option>
+                            <option value="PM">PM</option>
+                        </select>               
+                    </td>               
+                </tr>           
+            </table>
+<!--             <table>
+                <tr>
+                    <td>
+                        <label>Background Color</label>
+                    </td>
+                    <td>
+                        <div id="colorSelectorBackground"><div style="background-color: #333333; width:30px; height:30px; border: 2px solid #000000;"></div></div>
+                        <input type="hidden" id="colorBackground" value="#333333">
+                    </td>
+                    <td>&nbsp;&nbsp;&nbsp;</td>
+                    <td>
+                        <label>Text Color</label>
+                    </td>
+                    <td>
+                        <div id="colorSelectorForeground"><div style="background-color: #ffffff; width:30px; height:30px; border: 2px solid #000000;"></div></div>
+                        <input type="hidden" id="colorForeground" value="#ffffff">
+                    </td>                       
+                </tr>               
+            </table> -->
+        </fieldset>
+        </form>
+        
+    </div>      
     <p>&nbsp;</p>
 
 </div>

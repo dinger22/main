@@ -269,9 +269,82 @@ module.exports = function(app, passport) {
     // Profile==============================
     // =====================================
     app.get('/profile', function(req, res) {
-        res.render('profile.ejs',{
-            user : req.user //get the user information 
-        }); 
+        var select_club_query = "SELECT Role, Club_idClub, Club_Name, Display_name FROM organizer_team o, user u, membership m, club c WHERE u.idUser = " + req.user.idUser + " and m.User_idUser = u.idUser "+" and m.Club_idClub = c.idClub"+" and o.User_idUser = u.idUser";
+        connection.query(select_club_query,function(err,rows_club){
+            var club_idNum = rows_club[0].Club_idClub,
+            club_name = rows_club[0].Club_Name,
+            role_name = rows_club[0].Role,
+            Display_name = rows_club[0].Display_name;
+
+            var select_events_query = "SELECT * FROM events WHERE Club_idClub =" + club_idNum;
+            connection.query(select_events_query,function(err,rows_event){
+                if (err){
+                    console.log("error events");
+                    return;
+                }
+                if (rows_event.length) {
+                    var l_event = rows_event.length;
+                    var ex_event_id = [],
+                        ex_event_title = [],
+                        ex_event_end_time = [],
+                        ex_event_time = [];
+
+                    for (var index = 0; index < l_event; index++) {
+                        ex_event_id.push(rows_event[index].idEvents.toString());
+                        ex_event_title.push(rows_event[index].Title.toString());
+                        ex_event_time.push(rows_event[index].Start_time.toString());
+                        ex_event_end_time.push(rows_event[index].End_time.toString());
+                    }
+                    ex_event_id = ex_event_id.toString();
+                    ex_event_title = ex_event_title.toString();
+                    ex_event_time = ex_event_time.toString();
+                    ex_event_end_time = ex_event_end_time.toString();
+                    res.render('profile.ejs',{
+                        ex_event_id : ex_event_id,
+                        ex_event_title : ex_event_title,
+                        ex_event_time : ex_event_time, //get the user information
+                        ex_event_end_time : ex_event_end_time,
+                        club_idNum : club_idNum,
+                        club_name : club_name,
+                        Display_name : Display_name
+                    }); 
+                }
+                else{
+                    res.render('profile.ejs',{
+                        ex_event_id : '',
+                        ex_event_title : '',
+                        ex_event_time : '', //get the user information
+                        ex_event_end_time : '',
+                        club_idNum : club_idNum,
+                        club_name : club_name,
+                        Display_name : Display_name,
+                        role_name : role_name
+
+                    }); 
+                }   
+                
+            });    
+        });
+    });
+
+    app.post('/profile',function(req, res){
+        if (req.body.edit_event == null){
+            var insertQuery = "INSERT INTO events (Title, Start_time, End_time, Club_idClub) VALUES ('" + req.body.what + "','" + req.body.startDate +"','"+req.body.endDate +"','"+req.body.club_idNum + "')";
+        }
+        else{
+            //
+            var insertQuery = "UPDATE events SET Title = "+ req.body.what+ ", Start_time = '"+ req.body.startDate + "', End_time = '"+req.body.endDate+"' WHERE idEvents = "+req.body.eventID;
+        }
+        
+        connection.query(insertQuery,function(err,rows){
+            if (err){
+                console.log(err);
+                console.log("event error");
+            }else{
+                res.writeHead(303, { Location : req.url});
+                res.end();
+            }
+        });
     });
 
     // =====================================

@@ -13,25 +13,45 @@ module.exports = function(app) {
     // show the signup form
     app.get('/signup_profile', function(req, res) {
         // render the page and pass in any flash data if it exists
-        res.render('signup_profile.ejs',{
-            user : req.user //get the user information 
+        connection.query("SELECT Club_Name FROM club",function(err,rows){
+            if(err){
+                return;
+            }
+            else{
+                var l_club = rows.length;
+                var ex_club_name = [];
+                for (var index = 0; index < l_club; index++) {
+                    ex_club_name.push(rows[index].Club_Name.toString());
+                }
+                ex_club_name = ex_club_name.toString();
+                res.render('signup_profile.ejs',{
+                    user : req.user, //get the user information 
+                    ex_club_name : ex_club_name
+                });
+            }
         });
+
     });
     app.post('/signup_profile', function(req, res){
         connection.query("UPDATE user SET College = ?, Display_name = ? Where idUser = ?",[req.body.College,req.body.Name,req.user.idUser],function(err){
-            if(err){
-                console.log("baaaaaaaaaaaaaaaaaaaaaaaaaaad");
-                res.status(500).end();
-                return;
-            }
-            console.log("gooooooooooooooooooooood");
-            if (!req.body.Club_Name){
-                res.render('signup_create_club.ejs');
-            }else{
-                res.render('profile.ejs');
-            }
-            
-            return;
+            connection.query("INSERT INTO organizer_team (User_idUser, Role) values ('" + req.user.idUser+ "','"+ req.body.Club_Role +"')", function(err){
+                if(err){
+                    console.log(err);
+                    res.status(500).end();
+                    return;
+                }
+                if (!req.body.Club_Name){
+                    res.render('signup_create_club.ejs');
+                }else{
+                    connection.query("SELECT idClub FROM club where Club_Name = ?",[req.body.Club_Name],function(err,idclub){
+                        connection.query("INSERT INTO membership (Club_idClub, User_idUser) values ('"+idclub[0].idClub+"','"+req.user.idUser+"')", function(err){ 
+                            res.writeHead(303, { Location : '/profile', user:req.user});
+                            res.end();
+                        });     
+                    });
+                }
+                return; 
+                });
         });
         
     });
@@ -75,11 +95,13 @@ module.exports = function(app) {
                     if (err){
                         console.log("club error");
                     }else{
-                        res.render('profile.ejs',{
-                            user : req.user //get the user information 
-                        }); 
+                        connection.query("SELECT idClub FROM club where Club_Name = ?",[req.body.Club_Name],function(err,idclub){
+                            connection.query("INSERT INTO membership (Club_idClub, User_idUser) values ('"+idclub[0].idClub+"','"+req.user.idUser+"')", function(err){
+                                res.writeHead(303, { Location : '/profile', user:req.user});
+                                res.end();
+                            });
+                        });
                     }
-
                 }); 
             }   
         });

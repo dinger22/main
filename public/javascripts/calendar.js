@@ -2,7 +2,10 @@
 $(document).ready(function(){   
     var clickDate = "";
     var clickAgendaItem = "";
-    
+    var index_of_event = -1;
+    $("#user_name").val(user_name);
+    $("#club_name").val(club_name);
+    $("#role_name").val(role_name);
     var jfcalplugin = $("#mycal").jFrontierCal({
         date: new Date(),
         dayClickCallback: myDayClickHandler,
@@ -16,6 +19,52 @@ $(document).ready(function(){
     }).data("plugin");
     
     jfcalplugin.setAspectRatio("#mycal",0.4);
+    var id_list_len = ex_event_id.split(",").length,
+    id_list = ex_event_id.split(","),
+    title_list = ex_event_title.split(","),
+    end_time_list = ex_event_end_time.split(","),
+    time_list = ex_event_time.split(",");
+    for (var i = 0; i < id_list_len; i++) {
+        var newDate = time_string_to_date(time_list[i]);
+        var new_endDate = time_string_to_date(end_time_list[i]);
+        var content = title_list[i];
+        jfcalplugin.addAgendaItem(
+            "#mycal",
+            content,
+            newDate,
+            new_endDate,
+            false,
+            {
+                fname: "test",
+                lname: "test",
+                //leadReindeer: "Rudolph",
+                myDate: new Date(),
+                //myNum: 42
+            },
+            {
+                backgroundColor: $("#colorBackground").val(),
+                foregroundColor: $("#colorForeground").val()
+            }
+        );
+    }
+
+    function getMonthFromString(mon){
+
+       var d = Date.parse(mon + "1, 2012");
+       if(!isNaN(d)){
+          return new Date(d).getMonth() + 1;
+       }
+       return -1;
+     }
+
+    function time_string_to_date(date){
+      var month, date, year;
+      var date_arr = date.split(" ");
+      year = parseInt(date_arr[3]);
+      month = getMonthFromString(date_arr[1])-1;
+      date = parseInt(date_arr[2]);
+      return new Date(year,month,date);
+    }
 
     function myAgendaDragStart(eventObj,divElm,agendaItem){
         if(divElm.data("qtip")){
@@ -116,6 +165,15 @@ $(document).ready(function(){
         var agendaId = eventObj.data.agendaId;
         var agendaItem = jfcalplugin.getAgendaItemById("#mycal",agendaId);
     };
+
+    function date_to_yyyymmdd(date_obj){
+      var yyyy = date_obj.getFullYear().toString();
+      var mm = (date_obj.getMonth()+1).toString(); // getMonth() is zero-based
+      var dd  = date_obj.getDate().toString();
+      due_date_string = yyyy + "-" + (mm[1]?mm:"0"+mm[0]) + "-" + (dd[1]?dd:"0"+dd[0]); // padding
+      return due_date_string;
+    }
+
     $("#dateSelect").datepicker({
         showOtherMonths: true,
         selectOtherMonths: true,
@@ -223,7 +281,7 @@ $(document).ready(function(){
                     }else if(startMeridiem == "PM" && startHour < 12){
                         startHour = parseInt(startHour) + 12;
                     }
-                    var endDate = $("#endDate").val();
+                    var endDate = $("#startDate").val();
                     var endDtArray = endDate.split("-");
                     var endYear = endDtArray[0];
                     // jquery datepicker months start at 1 (1=January)      
@@ -251,6 +309,8 @@ $(document).ready(function(){
                     // Dates use integers
                     var startDateObj = new Date(parseInt(startYear),parseInt(startMonth)-1,parseInt(startDay),startHour,startMin,0,0);
                     var endDateObj = new Date(parseInt(endYear),parseInt(endMonth)-1,parseInt(endDay),endHour,endMin,0,0);
+                    var start_time_string = startHour.toString() + ":" + startMin.toString() + ":" + "00";
+                    var end_time_string = endHour.toString() + ":" + endMin.toString() + ":" + "00";
                     // add new event to the calendar
                     jfcalplugin.addAgendaItem(
                         "#mycal",
@@ -270,6 +330,38 @@ $(document).ready(function(){
                             foregroundColor: $("#colorForeground").val()
                         }
                     );
+                    var add_event_form = document.createElement("form");
+                    add_event_form.setAttribute("method", "post");
+                    add_event_form.setAttribute("action", "/profile");
+
+                    var titleField = document.createElement("input");
+                    titleField.setAttribute("type", "hidden");
+                    titleField.setAttribute("value", what);
+                    titleField.setAttribute("name", "what");
+                    add_event_form.appendChild(titleField);
+
+                    var timeField = document.createElement("input");
+                    timeField.setAttribute("type", "hidden");
+                    var start_date_val = startDate+" "+start_time_string;
+                    timeField.setAttribute("value", start_date_val);
+                    timeField.setAttribute("name", "startDate");
+                    add_event_form.appendChild(timeField);
+
+                    var endTimeField = document.createElement("input");
+                    endTimeField.setAttribute("type", "hidden");
+                    var end_date_val = endDate+" "+end_time_string;
+                    endTimeField.setAttribute("value", end_date_val);
+                    endTimeField.setAttribute("name", "endDate");
+                    add_event_form.appendChild(endTimeField);
+
+                    var clubField = document.createElement("input");
+                    clubField.setAttribute("type", "hidden");
+                    clubField.setAttribute("value", club_idNum);
+                    clubField.setAttribute("name", "club_idNum");
+                    add_event_form.appendChild(clubField);
+
+                    add_event_form.submit();
+
                     $(this).dialog('close');
                 }
                 
@@ -369,46 +461,206 @@ $(document).ready(function(){
                 $(this).dialog('close');
             },
             'Edit': function() {
-                alert("Make your own edit screen or dialog!");
-            },
-            'Delete': function() {
-                if(confirm("Are you sure you want to delete this agenda item?")){
-                    if(clickAgendaItem != null){
-                        jfcalplugin.deleteAgendaItemById("#mycal",clickAgendaItem.agendaId);
-                        //jfcalplugin.deleteAgendaItemByDataAttr("#mycal","myNum",42);
+                var what = jQuery.trim($("#edit_what").val());
+            
+                if(what == ""){
+                    alert("Please enter a short event description into the \"what\" field.");
+                }else{
+                
+                    var startDate = $("#edit_startDate").val();
+                    var startDtArray = startDate.split("-");
+                    var startYear = startDtArray[0];
+                    // jquery datepicker months start at 1 (1=January)      
+                    var startMonth = startDtArray[1];       
+                    var startDay = startDtArray[2];
+                    // strip any preceeding 0's     
+                    startMonth = startMonth.replace(/^[0]+/g,"");
+                    startDay = startDay.replace(/^[0]+/g,"");
+                    var startHour = jQuery.trim($("#edit_startHour").val());
+                    var startMin = jQuery.trim($("#edit_startMin").val());
+                    var startMeridiem = jQuery.trim($("#edit_startMeridiem").val());
+                    startHour = parseInt(startHour.replace(/^[0]+/g,""));
+                    if(startMin == "0" || startMin == "00"){
+                        startMin = 0;
+                    }else{
+                        startMin = parseInt(startMin.replace(/^[0]+/g,""));
                     }
+                    if(startMeridiem == "AM" && startHour == 12){
+                        startHour = 0;
+                    }else if(startMeridiem == "PM" && startHour < 12){
+                        startHour = parseInt(startHour) + 12;
+                    }
+                    var endDate = $("#edit_startDate").val();
+                    var endDtArray = endDate.split("-");
+                    var endYear = endDtArray[0];
+                    // jquery datepicker months start at 1 (1=January)      
+                    var endMonth = endDtArray[1];       
+                    var endDay = endDtArray[2];
+                    // strip any preceeding 0's     
+                    endMonth = endMonth.replace(/^[0]+/g,"");
+                    endDay = endDay.replace(/^[0]+/g,"");
+                    var endHour = jQuery.trim($("#edit_endHour").val());
+                    var endMin = jQuery.trim($("#edit_endMin").val());
+                    var endMeridiem = jQuery.trim($("#edit_endMeridiem").val());
+                    endHour = parseInt(endHour.replace(/^[0]+/g,""));
+                    if(endMin == "0" || endMin == "00"){
+                        endMin = 0;
+                    }else{
+                        endMin = parseInt(endMin.replace(/^[0]+/g,""));
+                    }
+                    if(endMeridiem == "AM" && endHour == 12){
+                        endHour = 0;
+                    }else if(endMeridiem == "PM" && endHour < 12){
+                        endHour = parseInt(endHour) + 12;
+                    }
+                    
+                    //alert("Start time: " + startHour + ":" + startMin + " " + startMeridiem + ", End time: " + endHour + ":" + endMin + " " + endMeridiem);
+                    // Dates use integers
+                    var startDateObj = new Date(parseInt(startYear),parseInt(startMonth)-1,parseInt(startDay),startHour,startMin,0,0);
+                    var endDateObj = new Date(parseInt(endYear),parseInt(endMonth)-1,parseInt(endDay),endHour,endMin,0,0);
+                    var start_time_string = startHour.toString() + ":" + startMin.toString() + ":" + "00";
+                    var end_time_string = endHour.toString() + ":" + endMin.toString() + ":" + "00";
+                    // add new event to the calendar
+                    // jfcalplugin.addAgendaItem(
+                    //     "#mycal",
+                    //     what,
+                    //     startDateObj,
+                    //     endDateObj,
+                    //     false,
+                    //     {
+                    //         fname: "XINU",
+                    //         lname: "LI",
+                    //         //leadReindeer: "Rudolph",
+                    //         myDate: new Date(),
+                    //         //myNum: 42
+                    //     },
+                    //     {
+                    //         backgroundColor: $("#colorBackground").val(),
+                    //         foregroundColor: $("#colorForeground").val()
+                    //     }
+                    // );
+                    var add_event_form = document.createElement("form");
+                    add_event_form.setAttribute("method", "post");
+                    add_event_form.setAttribute("action", "/profile");
+
+                    var titleField = document.createElement("input");
+                    titleField.setAttribute("type", "hidden");
+                    titleField.setAttribute("value", what);
+                    titleField.setAttribute("name", "what");
+                    add_event_form.appendChild(titleField);
+
+                    var timeField = document.createElement("input");
+                    timeField.setAttribute("type", "hidden");
+                    var start_date_val = startDate+" "+start_time_string;
+                    timeField.setAttribute("value", start_date_val);
+                    timeField.setAttribute("name", "startDate");
+                    add_event_form.appendChild(timeField);
+
+                    var endTimeField = document.createElement("input");
+                    endTimeField.setAttribute("type", "hidden");
+                    var end_date_val = endDate+" "+end_time_string;
+                    endTimeField.setAttribute("value", end_date_val);
+                    endTimeField.setAttribute("name", "endDate");
+                    add_event_form.appendChild(endTimeField);
+
+                    var clubField = document.createElement("input");
+                    clubField.setAttribute("type", "hidden");
+                    clubField.setAttribute("value", club_idNum);
+                    clubField.setAttribute("name", "club_idNum");
+                    add_event_form.appendChild(clubField);
+
+                    var editField = document.createElement("input");
+                    editField.setAttribute("type", "hidden");
+                    editField.setAttribute("value", "is_edit_event");
+                    editField.setAttribute("name", "edit_event");
+                    add_event_form.appendChild(editField);
+
+                    var editField = document.createElement("input");
+                    editField.setAttribute("type", "hidden");
+                    editField.setAttribute("value",  id_list[index_of_event].toString());
+                    editField.setAttribute("name", "eventID");
+                    add_event_form.appendChild(editField);
+
+                    add_event_form.submit();
+
                     $(this).dialog('close');
                 }
-            }           
+            }         
         },
         open: function(event, ui){
             if(clickAgendaItem != null){
+                $("#edit_startDate").datepicker({
+                    showOtherMonths: true,
+                    selectOtherMonths: true,
+                    changeMonth: true,
+                    changeYear: true,
+                    showButtonPanel: true,
+                    dateFormat: 'yy-mm-dd'
+                });
+
+                
                 var title = clickAgendaItem.title;
-                var startDate = clickAgendaItem.startDate;
-                var endDate = clickAgendaItem.endDate;
-                var allDay = clickAgendaItem.allDay;
-                var data = clickAgendaItem.data;
+                index_of_event = title_list.indexOf(title);
+                var startDate = new Date(time_list[index_of_event]),
+                    endDate = new Date(end_time_list[index_of_event]);
                 // in our example add agenda modal form we put some fake data in the agenda data. we can retrieve it here.
-                $("#display-event-form").append(
-                    "<br><b>" + title+ "</b><br><br>"       
-                );              
-                if(allDay){
-                    $("#display-event-form").append(
-                        "(All day event)<br><br>"               
-                    );              
-                }else{
-                    $("#display-event-form").append(
-                        "<b>Starts:</b> " + startDate + "<br>" + "<b>Ends:</b> " + endDate + "<br><br>"              
-                    );              
-                }
-                for (var propertyName in data) {
-                    $("#display-event-form").append("<b>" + propertyName + ":</b> " + data[propertyName] + "<br>");
-                }           
+                var eve_title = $("#edit_what");
+                eve_title.val(title);
+                
+
+                var eve_startDate = $("#edit_startDate");
+                var dateVal = date_to_yyyymmdd(startDate);
+                eve_startDate.val(dateVal);
+
+                var eve_edit_startHour = $("#edit_startHour");
+                var hours_val = startDate.getHours();
+                var ampm = hours_val >= 12 ? 'pm' : 'am';
+                hours_val = hours_val % 12;
+                hours_val = hours_val ? hours_val : 12; // the hour '0' should be '12'
+                //minutes = minutes < 10 ? '0'+minutes : minutes;
+                eve_edit_startHour.val(hours_val.toString());
+
+                var eve_edit_startMin = $("#edit_startMin");
+                var mind_val = startDate.getMinutes();
+                mind_val = mind_val < 10 ? '0'+ mind_val : mind_val;
+                eve_edit_startMin.val(mind_val.toString());
+
+                var eve_edit_startMeridiem = $("#edit_startMeridiem");
+                eve_edit_startMeridiem.val(ampm);
+
+
+
+                var eve_edit_endHour = $("#edit_endHour");
+                hours_val = endDate.getHours();
+                ampm = hours_val >= 12 ? 'pm' : 'am';
+                hours_val = hours_val % 12;
+                hours_val = hours_val ? hours_val : 12; // the hour '0' should be '12'
+                //minutes = minutes < 10 ? '0'+minutes : minutes;
+                eve_edit_endHour.val(hours_val.toString());
+
+                var eve_edit_endMin = $("#edit_endMin");
+                mind_val = endDate.getMinutes();
+                mind_val = mind_val < 10 ? '0'+ mind_val : mind_val;
+                eve_edit_endMin.val(mind_val.toString());
+
+                var eve_edit_endMeridiem = $("#edit_endMeridiem");
+                eve_edit_endMeridiem.val(ampm);     
+          
             }       
         },
         close: function() {
             // clear agenda data
-            $("#display-event-form").html("");
+            $("#edit_startDate").datepicker("destroy");
+            $("#edit_endDate").datepicker("destroy");
+            $("#edit_startDate").val("");
+            $("#edit_endDate").val("");
+            $("#edit_startHour option:eq(0)").attr("selected", "selected");
+            $("#edit_startMin option:eq(0)").attr("selected", "selected");
+            $("#edit_startMeridiem option:eq(0)").attr("selected", "selected");
+            $("#edit_endHour option:eq(0)").attr("selected", "selected");
+            $("#edit_endMin option:eq(0)").attr("selected", "selected");
+            $("#edit_endMeridiem option:eq(0)").attr("selected", "selected");            
+            $("#edit_what").val("");
         }
     });  
     /**

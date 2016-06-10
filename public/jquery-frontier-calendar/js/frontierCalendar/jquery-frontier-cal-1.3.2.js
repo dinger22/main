@@ -3031,8 +3031,8 @@
 				// don't show start time
 				agendaDiv.append("(All day event)<br>");
 			}else{
-				agendaDiv.append("From " + DateUtil.getAgendaDisplayTime(agendaStartDt) + " on " + agendaStartDt.toDateString() + 
-					" To " + DateUtil.getAgendaDisplayTime(agendaEndDt) + " " + agendaEndDt.toDateString()  + "<br>");
+				// agendaDiv.append("From " + DateUtil.getAgendaDisplayTime(agendaStartDt) + " on " + agendaStartDt.toDateString() + 
+					// " To " + DateUtil.getAgendaDisplayTime(agendaEndDt) + " " + agendaEndDt.toDateString()  + "<br>");
 			}
 			// add click event
 			if(cal.clickEvent_agendaCell != null){
