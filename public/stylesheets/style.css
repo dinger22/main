@@ -148,14 +148,14 @@ ul.tab li a:focus, .active {
 
 
 .profilebox1, .profilebox3{
-	width: 60%;
+	width: 50%;
 	float: left;
 	margin:1%;
 	padding-bottom: 1%;
 }
 
 .profilebox2{
-	width: 30%;
+	width: 40%;
 	float: left;
 	margin:1%;
 	padding-bottom: 1%;
@@ -250,14 +250,14 @@ ul.tab li a:focus, .active {
 
 /* Style for profile page*/
 
-#eventbox1, #eventbox2, #eventbox3{
+#eventbox1, #eventbox2, #eventbox3, #eventbox4, #eventbox5{
 	width: 200px;
 	height:80px;
 	border:1px solid #0088DD;
 	margin: 10px;
 }
 
-#eventbox1 p, #eventbox2 p, #eventbox3 p{
+#eventbox1 p, #eventbox2 p, #eventbox3 p, #eventbox4 p, #eventbox5 p{
 	text-align: center;
 	padding-top: 25px;
 	width:80px;
@@ -265,6 +265,11 @@ ul.tab li a:focus, .active {
 	border-right:1px solid #0088DD;
 	float: left;
 
+}
+
+div.well{
+	overflow: scroll;
+	height: 330px;
 }
 
 /*right side of events*/	
