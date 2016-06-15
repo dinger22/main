@@ -1,9 +1,10 @@
 var mysql        = require("mysql");
 var connection  = mysql.createConnection({
-    host: "127.0.0.1",
-    user: "root",
-    password: "11235813",
-    database: "mydb"
+  host: "groop123.ctrhjjzjrs0h.us-west-2.rds.amazonaws.com",
+  user: "groopdb",
+  password: "11235813",
+  database: "mydb",
+  port:"3306"
 });
 
 module.exports = function(app) {
@@ -13,25 +14,46 @@ module.exports = function(app) {
     // show the signup form
     app.get('/signup_profile', function(req, res) {
         // render the page and pass in any flash data if it exists
-        res.render('signup_profile.ejs',{
-            user : req.user //get the user information 
+        connection.query("SELECT Club_Name FROM club",function(err,rows){
+            if(err){
+                return;
+            }
+            else{
+                var l_club = rows.length;
+                var ex_club_name = [];
+                for (var index = 0; index < l_club; index++) {
+                    ex_club_name.push(rows[index].Club_Name.toString());
+                }
+                ex_club_name = ex_club_name.toString();
+                res.render('signup_profile.ejs',{
+                    user : req.user, //get the user information 
+                    ex_club_name : ex_club_name
+                });
+            }
         });
+
     });
     app.post('/signup_profile', function(req, res){
         connection.query("UPDATE user SET College = ?, Display_name = ? Where idUser = ?",[req.body.College,req.body.Name,req.user.idUser],function(err){
-            if(err){
-                console.log("baaaaaaaaaaaaaaaaaaaaaaaaaaad");
-                res.status(500).end();
-                return;
-            }
-            console.log("gooooooooooooooooooooood");
-            if (!req.body.Club_Name){
-                res.render('signup_create_club.ejs');
-            }else{
-                res.render('profile.ejs');
-            }
-            
-            return;
+            connection.query("INSERT INTO organizer_team (User_idUser, Role) values ('" + req.user.idUser+ "','"+ req.body.Club_Role +"')", function(err){
+                if(err){
+                    console.log(err);
+                    res.status(500).end();
+                    return;
+                }
+                if (req.body.Club_Name == "noclub"){
+                    res.writeHead(303, { Location : '/signup_create_club', user:req.user});
+                    res.end();
+                }else{
+                    connection.query("SELECT idClub FROM club where Club_Name = ?",[req.body.Club_Name],function(err,idclub){
+                        connection.query("INSERT INTO membership (Club_idClub, User_idUser) values ('"+idclub[0].idClub+"','"+req.user.idUser+"')", function(err){ 
+                            res.writeHead(303, { Location : '/profile', user:req.user});
+                            res.end();
+                        });     
+                    });
+                }
+                return; 
+                });
         });
         
     });
@@ -42,20 +64,27 @@ module.exports = function(app) {
     // show the signup form
     app.get('/signup_create_club', function(req, res) {
         // render the page and pass in any flash data if it exists
-        res.render('signup_create_club.ejs');
+        res.render('signup_create_club.ejs', { 
+            message : ''
+        }); 
     });
 
     app.post('/signup_create_club', function(req, res){
 
-        connection.query("SELECT * FROM club WHERE Description = '"+req.body.Club_Name+"'",function(err,rows){
+        connection.query("SELECT * FROM club WHERE Club_Name = '"+req.body.Club_Name+"'",function(err,rows){
             console.log(rows);
             console.log("above row object");
             if (err)
                 console.log(err);
             if (rows.length) {
-                console.log("name taken");
-            } else {
-
+                res.render('signup_create_club.ejs', { 
+                    message: "This club name is already taken"
+                }); 
+                // console.log("name taken");
+                // res.writeHead(303, { Location : '/signup_create_club', user:req.user});
+                // res.end();
+            } 
+            else {
                 // if there is no user with that email
                 // create the user
                 var newClub = new Object();
@@ -75,11 +104,13 @@ module.exports = function(app) {
                     if (err){
                         console.log("club error");
                     }else{
-                                res.render('profile.ejs',{
-            user : req.user //get the user information 
-        }); 
+                        connection.query("SELECT idClub FROM club where Club_Name = ?",[req.body.Club_Name],function(err,idclub){
+                            connection.query("INSERT INTO membership (Club_idClub, User_idUser) values ('"+idclub[0].idClub+"','"+req.user.idUser+"')", function(err){
+                                res.writeHead(303, { Location : '/profile', user:req.user});
+                                res.end();
+                            });
+                        });
                     }
-
                 }); 
             }   
         });
