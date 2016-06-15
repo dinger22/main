@@ -1782,7 +1782,7 @@ links.Timeline.prototype.repaintItems = function() {
     // redraw the delete button and dragareas of the selected item (if any)
     this.repaintDeleteButton();
     this.repaintCompleteButton();
-    this.repaintEditButton();
+    //this.repaintEditButton();
     this.repaintDragAreas();
 
     // put frame online again
@@ -2157,8 +2157,8 @@ links.Timeline.prototype.repaintDeleteButton = function () {
         var right = item.getRight(this),
             top = item.top + item.height;
 
-        deleteButton.style.left = right + 60 + 'px';
-        deleteButton.style.top = top - 25 + 'px';
+        deleteButton.style.left = right + 'px';
+        deleteButton.style.top = top - 30 + 'px';
         deleteButton.style.zIndex = 1000;
         deleteButton.style.display = '';
         frame.removeChild(deleteButton);
@@ -2192,13 +2192,13 @@ links.Timeline.prototype.repaintCompleteButton = function () {
     var index = (this.selection && this.selection.index !== undefined) ? this.selection.index : -1,
         item = (this.selection && this.selection.index !== undefined) ? this.items[index] : undefined;
     if (item && item.rendered) {
-        var right = item.getRight(this),
+        var left = item.getLeft(this),
             top = item.top + item.height;
 
-        completeButton.style.left = right + 'px';
-        completeButton.style.top = top - 25 + 'px';
+        completeButton.style.left = left - 30 + 'px';
+        completeButton.style.top = top - 30 + 'px';
         completeButton.style.zIndex = 1000;
-        completeButton.style.backgroundColor = "lightblue";
+        completeButton.style.backgroundColor = "";
         completeButton.style.display = '';
         frame.removeChild(completeButton);
         frame.appendChild(completeButton);
@@ -2234,8 +2234,8 @@ links.Timeline.prototype.repaintEditButton = function () {
         var right = item.getRight(this),
             top = item.top + item.height;
 
-        editButton.style.left = right + 30 +'px';
-        editButton.style.top = top - 25 + 'px';
+        editButton.style.left = right +'px';
+        editButton.style.top = top - 30 + 'px';
         editButton.style.zIndex = 1000;
         editButton.style.backgroundColor = "lightblue";
         editButton.style.display = '';
@@ -2916,7 +2916,7 @@ links.Timeline.prototype.onMouseMove = function (event) {
                 left,
                 right;
 
-            if (params.itemDragLeft && options.timeChangeable) {
+            if (false && options.timeChangeable) {
                 // move the start of the item
                 left = params.itemLeft + diffX;
                 right = params.itemRight;
@@ -2933,7 +2933,7 @@ links.Timeline.prototype.onMouseMove = function (event) {
                 }
               this.trigger('change');
             }
-            else if (params.itemDragRight && options.timeChangeable) {
+            else if (false && options.timeChangeable) {
                 // move the end of the item
                 left = params.itemLeft;
                 right = params.itemRight + diffX;
@@ -2950,7 +2950,7 @@ links.Timeline.prototype.onMouseMove = function (event) {
                 }
               this.trigger('change');
             }
-            else if (options.timeChangeable) {
+            else if (false) {
                 // move the item
                 left = params.itemLeft + diffX;
                 var movedStart = left + (params.itemRight - params.itemLeft)/2;
@@ -2969,7 +2969,8 @@ links.Timeline.prototype.onMouseMove = function (event) {
 
             //item.setPosition(left, right);
 
-            var dragging = params.itemDragLeft || params.itemDragRight;
+            //var dragging = params.itemDragLeft || params.itemDragRight;
+            var dragging = false;
             if (this.groups.length && !dragging) {
                 // move item from one group to another when needed
                 var y = mouseY - params.frameTop;
@@ -2982,7 +2983,7 @@ links.Timeline.prototype.onMouseMove = function (event) {
                 else {
                     this.repaintDeleteButton();
                     this.repaintCompleteButton();
-                    this.repaintEditButton();
+                    //this.repaintEditButton();
                     this.repaintDragAreas();
                 }
             }
@@ -5338,7 +5339,7 @@ links.Timeline.prototype.selectItem = function(index) {
         }
         this.repaintDeleteButton();
         this.repaintCompleteButton();
-        this.repaintEditButton();
+        //this.repaintEditButton();
         this.repaintDragAreas();
     }
 };
@@ -5358,7 +5359,7 @@ links.Timeline.prototype.selectCluster = function(index) {
         };
         this.repaintDeleteButton();
         this.repaintCompleteButton();
-        this.repaintEditButton();
+        //this.repaintEditButton();
         this.repaintDragAreas();
     }
 };
@@ -5388,7 +5389,7 @@ links.Timeline.prototype.unselectItem = function() {
         this.selection = undefined;
         this.repaintDeleteButton();
         this.repaintCompleteButton();
-        this.repaintEditButton();
+        //this.repaintEditButton();
         this.repaintDragAreas();
     }
 };

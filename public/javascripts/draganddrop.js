@@ -10,10 +10,10 @@ google.load("visualization", "1");
 // Set callback to run when API is loaded
 google.setOnLoadCallback(drawVisualization);
 
-function load_event(eventnumber){
+function load_event(){
   var get_event_form = document.getElementById('get_event');
   var event_number = document.getElementById('event_number');
-  event_number.value = eventnumber;
+  event_number.value = current_event_number;
   get_event_form.submit();
 }
 
@@ -72,9 +72,10 @@ function createtimeline1(){
     'width':  "100%",
     'height': "200px",
     'editable': true, // make the events dragable
-    'snapEvents': false,
+    'snapEvents': true,
     'layout': "box",
     'showMajorLabels': true,
+    "moveable" : false
   };
 
   // Instantiate our timeline object.
@@ -93,7 +94,7 @@ function createtimeline1(){
     if (row != undefined) {
         var content = data.getValue(row, 2);
         //document.getElementById("txtContent").value = content;
-        document.getElementById("info").innerHTML += "event " + row + " selected<br>";
+        // document.getElementById("info").innerHTML += "event " + row + " selected<br>";
 
     }
   };
@@ -104,7 +105,7 @@ function createtimeline1(){
     if (sel.length) {
         if (sel[0].row != undefined) {
             var row = sel[0].row;
-            document.getElementById("info").innerHTML += "event " + row + " changed<br>";
+            // document.getElementById("info").innerHTML += "event " + row + " changed<br>";
         }
     }
   };
@@ -112,7 +113,7 @@ function createtimeline1(){
   // callback function for the add event
   var onadd = function () {
     var count = data.getNumberOfRows();
-    document.getElementById("info").innerHTML += "event " + (count-1) + " added<br>";
+    // document.getElementById("info").innerHTML += "event " + (count-1) + " added<br>";
   };
 
   // Add event listeners
@@ -191,13 +192,13 @@ function drawVisualization() {
  */
 
 function onrangechange1() {
-  document.getElementById("info").innerHTML+="range changed"
+  // document.getElementById("info").innerHTML+="range changed"
   var range = tl1.getVisibleChartRange();
   tl2.setVisibleChartRange(range.start, range.end);  
 }
 
 function onrangechange2() {
-  document.getElementById("info").innerHTML+="range changed"
+  // document.getElementById("info").innerHTML+="range changed"
   var range = tl2.getVisibleChartRange();
   tl1.setVisibleChartRange(range.start, range.end);
 }
@@ -238,34 +239,41 @@ $(function(){
 
   $("#dialog-form-task").dialog({
     autoOpen: false,
-    height: 600,
+    height: 400,
     width: 350,
     modal: true,
     buttons:{
       "Confirm": function(){
         var post_form = $("#post_form");
+        var load_event_number = $("#eventID");
+        load_event_number.val(current_event_number);
         post_form.submit();
-        addTask(title);
-        tl1.eventParams.itemIndex = (tl1.items.length - 1);
-        tl1.selectItem(tl1.eventParams.itemIndex);
 
-        tl1.applyAdd = true;
-        tl1.trigger('add');
+        if (go_sub){
+          go_sub = false;
+          addTask(title);
+          tl1.eventParams.itemIndex = (tl1.items.length - 1);
+          tl1.selectItem(tl1.eventParams.itemIndex);
 
-        if (tl1.applyAdd) {
-            // render and select the item
-            tl1.render({animate: false});
-            tl1.selectItem(tl1.eventParams.itemIndex);
+          tl1.applyAdd = true;
+          tl1.trigger('add');
+
+          if (tl1.applyAdd) {
+              // render and select the item
+              tl1.render({animate: false});
+              tl1.selectItem(tl1.eventParams.itemIndex);
+          }
+          else {
+              // undo an add
+              tl1.deleteItem(tl1.eventParams.itemIndex);
+          }
+          links.Timeline.preventDefault(event);
+
+          $( this).dialog( "close" );
         }
-        else {
-            // undo an add
-            tl1.deleteItem(tl1.eventParams.itemIndex);
-        }
-        links.Timeline.preventDefault(event);
-
-        $( this).dialog( "close" );
         },
       "Cancel": function() {
+        load_event();
         $( this ).dialog( "close" );
       }
     },
@@ -283,11 +291,16 @@ $(function(){
       "Confirm": function(){
         var post_form = $("#post_edit_form");
         post_form.submit();
-        links.Timeline.preventDefault(event);
+        if(go_sub){
+          go_sub = false;
+          links.Timeline.preventDefault(event);
 
-        $( this).dialog( "close" );
+          $( this).dialog( "close" );     
+        }
+
         },
       "Cancel": function() {
+        load_event();
         $( this ).dialog( "close" );
       }
     },
@@ -306,10 +319,13 @@ $(function(){
       "Confirm": function(){
         var post_pay_form = $("#post_edit_payment_form");
         post_pay_form.submit();
-        links.Timeline.preventDefault(event);
-        $( this).dialog( "close" );
+        if(go_sub){
+          links.Timeline.preventDefault(event);
+          $( this).dialog( "close" );
+        }
         },
       "Cancel": function() {
+        load_event();
         $( this ).dialog( "close" );
       }
     },
@@ -334,31 +350,37 @@ $(function(){
     dialogClass: "MyClass",
     buttons:{
       "Confirm": function(){
-        addPayment(title_pay);
-        tl1.eventParams.itemIndex = (tl1.items.length - 1);
-        tl1.selectItem(tl1.eventParams.itemIndex);
-
-        tl1.applyAdd = true;
-        // fire an add event.
-        // Note that the change can be canceled from within an event listener if
-        // this listener calls the method cancelAdd().
-        tl1.trigger('add');
-
-        if (tl1.applyAdd) {
-            // render and select the item
-            tl1.render({animate: false});
-            tl1.selectItem(tl1.eventParams.itemIndex);
-        }
-        else {
-            // undo an add
-            tl1.deleteItem(tl1.eventParams.itemIndex);
-        }
-        links.Timeline.preventDefault(event);
         var post_pay_form = $("#post_payment_form");
+        var load_event_number = $("#eventID_pay");
+        load_event_number.val(current_event_number);
         post_pay_form.submit();
-        $( this).dialog( "close" );
+        if(go_sub){
+          addPayment(title_pay);
+          tl1.eventParams.itemIndex = (tl1.items.length - 1);
+          tl1.selectItem(tl1.eventParams.itemIndex);
+
+          tl1.applyAdd = true;
+          // fire an add event.
+          // Note that the change can be canceled from within an event listener if
+          // this listener calls the method cancelAdd().
+          tl1.trigger('add');
+
+          if (tl1.applyAdd) {
+              // render and select the item
+              tl1.render({animate: false});
+              tl1.selectItem(tl1.eventParams.itemIndex);
+          }
+          else {
+              // undo an add
+              tl1.deleteItem(tl1.eventParams.itemIndex);
+          }
+          links.Timeline.preventDefault(event);
+
+          $( this).dialog( "close" );
+        }
         },
       "Cancel": function() {
+        load_event();
         $( this ).dialog( "close" );
       }
     },
@@ -521,8 +543,8 @@ function editEvent() {
     $('#dialog-form-edit-task').dialog('open');
     var tasks_id_list = ex_tasks_id.split(","),
       title_list = ex_tasks_content.split(","),
-      description_list = ex_tasks_Description.split("*Description*,"),
-      asignee_list = ex_tasks_Assignee.split("*Assignee*,"),
+      description_list = ex_tasks_Description.replace(/,/g,"").split("*Description*"),
+      asignee_list = ex_tasks_Assignee.replace(/,/g,"").split("*Assignee*"),
       due_list = ex_tasks_time.split(",");
     
     var title = content[1];

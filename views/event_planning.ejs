@@ -10,6 +10,7 @@
     <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
     
     <!-- <link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css"> -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="timeline/timeline.css">
     <link rel="stylesheet" href="/stylesheets/draganddrop.css">
     <link rel="stylesheet" href="/stylesheets/style.css">
@@ -20,10 +21,11 @@
 <body>
   <img class = "displayed_right" src="/images/groop_icon_logo.png" alt="Groop Logo" width="5%" height="5%">
   <form action="/event_planning" method="get" id = "get_event">
-    <input type="text" name="event_number" id="event_number">
-    <button onclick="load_event(1)" class="displayed_right btn btn-warning btn-lg">Event 1</button>
-    <button onclick="load_event(2)" class="displayed_right btn btn-warning btn-lg">Event 2</button>
+    <input type="hidden" name="event_number" id="event_number">
   </form>  
+  <% if (message.length > 0) { %>
+      <div class="alert alert-danger"><%= message %></div>
+  <% } %>
   <div id="mytimeline" class="displayed_right dropzone noborder-top" ></div>
   <div id="mytimeline2"></div>
   <script type="text/javascript">
@@ -41,37 +43,117 @@
     var ex_pay_time= <%- JSON.stringify(ex_pay_time) %>; 
     var ex_pay_Status = <%- JSON.stringify(ex_pay_Status) %>;
 
+    var current_event_number = <%- JSON.stringify(current_event_number) %>;
+
+    var go_sub = false;
+
+    function isNumberKey(evt)
+    {
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if (charCode != 46 && charCode > 31 
+        && (charCode < 48 || charCode > 57))
+         return false;
+      return true;
+    }
+
+    function post_form_validateForm() {
+      var tn = document.forms["post_form"]["Task_name"].value;
+      if (tn == null || tn == "") {
+          alert("All fields must be filled out");
+          return false;
+      }
+      if (!/^[a-zA-Z]*$/g.test(tn)) {
+          alert("Invalid characters");
+          document.post_form.Task_name.focus();
+          return false;
+      }
+      var dd = document.forms["post_form"]["Due_date"].value;
+      if (dd == null || dd == "") {
+          alert("All fields must be filled out");
+          return false;
+      }
+      go_sub = true;
+    }
+
+    function post_edit_form_validateForm() {
+      var tn = document.forms["post_edit_form"]["Task_name"].value;
+      if (tn == null || tn == "") {
+          alert("All fields must be filled out");
+          return false;
+      }
+      if (!/^[a-zA-Z]*$/g.test(tn)) {
+          alert("Invalid characters");
+          document.post_edit_form.Task_name.focus();
+          return false;
+      }
+      var dd = document.forms["post_edit_form"]["Due_date"].value;
+      if (dd == null || dd == "") {
+          alert("All fields must be filled out");
+          return false;
+      }
+      go_sub = true;
+    }
+
+    function post_payment_form_validateForm() {
+      var tn = document.forms["post_payment_form"]["title_pay"].value;
+      if (tn == null || tn == "") {
+          alert("All fields must be filled out");
+          return false;
+      }
+      var dd = document.forms["post_payment_form"]["amount"].value;
+      if (dd == null || dd == "") {
+          alert("All fields must be filled out");
+          return false;
+      }
+      go_sub = true;
+    }
+
+    function post_edit_payment_form() {
+      var tn = document.forms["post_edit_payment_form"]["title_pay"].value;
+      if (tn == null || tn == "") {
+          alert("All fields must be filled out");
+          return false;
+      }
+      var dd = document.forms["post_edit_payment_form"]["amount"].value;
+      if (dd == null || dd == "") {
+          alert("All fields must be filled out");
+          return false;
+      }
+      go_sub = true;
+    }
+
   </script>
 
   <div id="dialog-form-task">
-    <form action="/event_planning" method="post" id = "post_form">
+    <form action="/event_planning" onsubmit="return post_form_validateForm()" method="post" id = "post_form" name = "post_form">
         <fieldset class="form-group" style="overflow: auto; border : none;" >
-          <input type="hidden" name="eventID">
-          <input type="heidden" name="actionType">
-          <input type="text" name="Task_name" id="title_task" class="text ui-widget-content ui-corner-all" style="text-align : center; margin-bottom:12px; width:95%; border:1px;padding: .4em;">
-          <textarea type="text"  name = "Description" id="Description" class="text ui-widget-content ui-corner-all" style="margin-bottom:12px; width:95%; height : 100px; padding: .4em;"></textarea>
+
+          <input placeholder="Task name" type="text" name="Task_name" id="title_task" class="text ui-widget-content ui-corner-all" style="text-align : center; margin-bottom:12px; width:100%; border:1px;padding: .4em;" >
+          <textarea placeholder="Description" type="text"  name = "Description" id="Description" class="text ui-widget-content ui-corner-all" style="margin-bottom:12px; width:100%; height : 100px; padding: .4em;"></textarea>
           <div class="form-group" style = "padding: 5px 0px;">
             <label>Assign to</label>
-            <input type="text" name="Asignee" id="Asignee" class="text ui-widget-content ui-corner-all" style="float : right; width:50%;">
+            <input type="text" name="Asignee" id="Asignee" class="text ui-widget-content ui-corner-all" style="float : right; width:50%;" required>
           </div>
           <div class="form-group" style = "padding: 5px 0px;">
             <label style = "clear:right">Due Date</label>
-            <input type="date" name="Due_date" id = "Due_date_task" style="float : right; width:50%;">
+            <input type="date" name="Due_date" id = "Due_date_task" style="float : right; width:50%;" required>
           </div>
           <div class="form-group" style = "padding: 5px 0px;">
             <label style = "clear:right">End Time</label>
             <input type="time" name="end_time" style="float : right; width:50%;">                
           </div>
+          <input type="hidden" id = "eventID" name="eventID">
+          <input type="hidden" name="actionType">
         </fieldset>
       <!-- <button type="submit" class="btn btn-warning btn-lg">Confirm</button> -->
     </form>  
   </div>
 
   <div id="dialog-form-edit-task">
-    <form action="/event_planning" method="post" id = "post_edit_form">
+    <form action="/event_planning" onsubmit="return post_edit_form_validateForm()" method="post" id = "post_edit_form" name = "post_edit_form">
         <fieldset class="form-group" style="overflow: auto; border : none;" >
-          <input type="text" name="Task_name" id="edit_title_task" class="text ui-widget-content ui-corner-all" style="text-align : center; margin-bottom:12px; width:95%; border:1px;padding: .4em;">
-          <textarea type="text"  name = "Description" id="edit_Description" class="text ui-widget-content ui-corner-all" style="margin-bottom:12px; width:95%; height : 100px; padding: .4em;"></textarea>
+          <input type="text" name="Task_name" id="edit_title_task" class="text ui-widget-content ui-corner-all" style="text-align : center; margin-bottom:12px; width:100%; border:1px;padding: .4em;">
+          <textarea type="text"  name = "Description" id="edit_Description" class="text ui-widget-content ui-corner-all" style="margin-bottom:12px; width:100%; height : 100px; padding: .4em;"></textarea>
           <div class="form-group" style = "padding: 5px 0px;">
             <label>Assign to</label>
             <input type="text" name="Asignee" id="edit_Asignee" class="text ui-widget-content ui-corner-all" style="float : right; width:50%;">
@@ -93,19 +175,20 @@
 
 
   <div id="dialog-form-payment">
-    <form action="/event_planning" method="post" id = "post_payment_form" style=" margin:13%;">
+    <form action="/event_planning" onsubmit="return post_payment_form_validateForm()" method="post" id = "post_payment_form" name = "post_payment_form" style=" margin:13%;">
+      <input type="hidden" id = "eventID_pay" name="eventID">
       <input type="hidden" name="pay_time" id="pay_time">
-      <input type="text" name="title_pay" id="title_pay" class="text ui-widget-content ui-corner-all" style="text-align : center; margin-bottom:12px; width:95%; border:1px;padding: .4em;">
+      <input type="text" placeholder="Entry name" name="title_pay" id="title_pay" class="text ui-widget-content ui-corner-all" style="text-align : center; margin-bottom:12px; width:80%; margin-left: 20px; border:1px;padding: .4em;">
       <div class="column" draggable="false" >
           <img class = "displayed_left" src="/images/persona.png" alt="New Task" width="80" height="80" >
-          <label style="padding-left: 7px">Name</label>
+          <!-- <label style="padding-left: 7px">Name</label> -->
       </div>
       <fieldset class="form-group" style = "border : none">
         <div>
-            <textarea name="title" id="title" class="text ui-widget-content ui-corner-all" style="margin-bottom:12px; width:95%; height : 100px; padding: .4em;"></textarea>
+            <textarea name="title" id="title" placeholder="Purpose" class="text ui-widget-content ui-corner-all" style="margin-bottom:12px; width:95%; height : 100px; padding: .4em;"></textarea>
             <div class="form-group" style = "padding : 5px 0px;">
               <label>CAD</label>
-              <input type="number" name="amount" id="amount" style="float : right; width:50%;">
+              <input type="number" step="0.01" onkeypress="return isNumberKey(event)" name="amount" id="amount" style="float : right; width:40%;">
             </div>  
         </div>  
       </fieldset>
@@ -115,7 +198,7 @@
 
 
   <div id="dialog-form-edit-payment">
-    <form action="/event_planning" method="post" id = "post_edit_payment_form" style=" margin:13%;">
+    <form action="/event_planning" method="post" onsubmit="return post_edit_payment_form_validateForm()" name = "post_edit_payment_form" id = "post_edit_payment_form" style=" margin:13%;">
       <input type="hidden" name="pay_time" id="edit_pay_time">
       <input type="text" name="title_pay" id="edit_title_pay" class="text ui-widget-content ui-corner-all" style="text-align : center; margin-bottom:12px; width:95%; border:1px;padding: .4em;">
       <div class="column" draggable="false" >
@@ -127,7 +210,7 @@
             <textarea name="title" id="edit_title" class="text ui-widget-content ui-corner-all" style="margin-bottom:12px; width:95%; height : 100px; padding: .4em;"></textarea>
             <div class="form-group" style = "padding : 5px 0px;">
               <label>CAD</label>
-              <input type="number" name="amount" id="edit_amount" style="float : right; width:50%;">
+              <input type="number" name="amount" step="0.01" onkeypress="return isNumberKey(event)" id="edit_amount" style="float : right; width:50%;">
             </div>  
         </div>  
       </fieldset>
@@ -148,6 +231,6 @@
     </div>
   </div> 
   <script src="/javascripts/draganddrop.js"></script>
-  <div id="info"></div>
+  <div id="info" type = "hidden"></div>
 </body>
 </html>

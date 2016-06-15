@@ -13,11 +13,31 @@
     <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 <body>
+<script type="text/javascript">
 
+    function validateForm() {
+      var tn = document.forms["profile_form"]["Name"].value;
+      if (tn == null || tn == "") {
+          alert("Name must be filled out");
+          return false;
+      }
+      if (!/^[a-zA-Z]*$/g.test(tn)) {
+          alert("Invalid characters");
+          document.profile_form.Name.focus();
+          return false;
+      }
+      var dd = document.forms["profile_form"]["School"].value;
+      if (dd == null || dd == "") {
+          alert("All fields must be filled out");
+          return false;
+      }
+    }
+
+</script>
 <div id = ""  >
     <div class="profilebox2 article">
     <fieldset style="height: 250px">
-    <form action="/signup_profile" method="post">
+    <form action="/signup_profile" name = "profile_form" method="post">
         <p><u>Please input your basic information</u></p>
         <div class="form-group">
             <label>Name :</label>
@@ -37,6 +57,11 @@
         ex_club_name = ex_club_name.split(","); 
         var club_name_selector = document.getElementById("Club_Name"),
         club_num = ex_club_name.length;
+        var op = document.createElement("option");
+        op.setAttribute("value", "noclub");
+        var t = document.createTextNode("");
+        op.appendChild(t);
+        club_name_selector.appendChild(op);
         for (var index = 0; index<club_num;index++){
             var op = document.createElement("option");
             op.setAttribute("value", ex_club_name[index]);
@@ -60,11 +85,12 @@
         </div> 
 
             <div class="profilebox2" style="float:left;">
-
-            <button type="submit" class="groopbutton">Confirm</button></div>
- <div class="profilebox2" style="float:left;">
-        <button href="/profile" class="groopbutton">Cancel</button>
-        </div>
+                <button type="submit" class="groopbutton">Confirm</button>
+            </div>
+             <div class="profilebox2" style="float:left;">
+                <a href="/index"><input type="button" class="groopbutton" value="Cancel" /></a>
+                <!-- <button type='button' href="/index" class="groopbutton">Cancel</button> -->
+            </div>
 
     </form>
     </fieldset>

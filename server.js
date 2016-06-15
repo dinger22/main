@@ -19,8 +19,8 @@ var path = require('path');
 
 var mysql        = require("mysql");
 var con = mysql.createConnection({
-  host: "localhost",
-  user: "root",
+  host: "groop123.ctrhjjzjrs0h.us-west-2.rds.amazonaws.com",
+  user: "groopdb",
   password: "11235813",
   database: "mydb",
   port:"3306"

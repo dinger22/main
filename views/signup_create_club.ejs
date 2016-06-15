@@ -4,6 +4,7 @@
 <head>   
     <script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
     <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <div id="header">
         <h1>Create New Club</h1>
     </div>
@@ -11,13 +12,37 @@
         <img src="/images/Groop_icon.png" height="100px", width="100px">
     </div>
 </head>
+<body style="margin-left: 50px">
+<script type="text/javascript">
 
-<body>
-<div id = "profilecontent" >
-    <div class="profilebox1 article">
+    function validateForm() {
+      var tn = document.forms["club_form"]["Club_Name"].value;
+      if (tn == null || tn == "") {
+          alert("All fields must be filled out");
+          return false;
+      }
+      if (!/^[a-zA-Z]*$/g.test(tn)) {
+          alert("Invalid characters");
+          document.club_form.Club_Name.focus();
+          return false;
+      }
+      var dd = document.forms["club_form"]["School"].value;
+      if (dd == null || dd == "") {
+          alert("All fields must be filled out");
+          return false;
+      }
+    }
+
+</script>
+
+<div id = "profilecontent">
+    <div class="profilebox1_club article" >
         <fieldset>
-	       <form action="/signup_create_club" method="post">
-            <p><u>Please input your basic information</u></p>
+            <% if (message.length > 0) { %>
+                <div class="alert alert-danger"><%= message %></div>
+            <% } %>
+	       <form style="border: 1px solid black;" action="/signup_create_club" name = "club_form" method="post" onsubmit="return validateForm()">
+            <p style="text-align: center"><u>Please input your basic information</u></p>
             <div class="form-group">
 
                 <label>Club Name :
@@ -63,9 +88,10 @@
             <div class="profilebox2" style="float:left;">
 
             <button type="submit" class="groopbutton">Confirm</button></div>
- <div class="profilebox2" style="float:left;">
-        <button href="/profile" class="groopbutton">Cancel</button>
-        </div>
+            <div class="profilebox2" style="float:left;">
+            <a href="/signup_profile"><input type="button" class="groopbutton" value="Cancel" /></a>
+                <!-- <input type='button' href="/signup_profile" class="groopbutton">Cancel</input> -->
+            </div>
             </form>
         </fieldset>
         

@@ -1,9 +1,10 @@
 var mysql        = require("mysql");
 var connection  = mysql.createConnection({
-    host: "127.0.0.1",
-    user: "root",
-    password: "11235813",
-    database: "mydb"
+  host: "groop123.ctrhjjzjrs0h.us-west-2.rds.amazonaws.com",
+  user: "groopdb",
+  password: "11235813",
+  database: "mydb",
+  port:"3306"
 });
 
 module.exports = function(app) {
@@ -40,8 +41,9 @@ module.exports = function(app) {
                     res.status(500).end();
                     return;
                 }
-                if (!req.body.Club_Name){
-                    res.render('signup_create_club.ejs');
+                if (req.body.Club_Name == "noclub"){
+                    res.writeHead(303, { Location : '/signup_create_club', user:req.user});
+                    res.end();
                 }else{
                     connection.query("SELECT idClub FROM club where Club_Name = ?",[req.body.Club_Name],function(err,idclub){
                         connection.query("INSERT INTO membership (Club_idClub, User_idUser) values ('"+idclub[0].idClub+"','"+req.user.idUser+"')", function(err){ 
@@ -62,18 +64,25 @@ module.exports = function(app) {
     // show the signup form
     app.get('/signup_create_club', function(req, res) {
         // render the page and pass in any flash data if it exists
-        res.render('signup_create_club.ejs');
+        res.render('signup_create_club.ejs', { 
+            message : ''
+        }); 
     });
 
     app.post('/signup_create_club', function(req, res){
 
-        connection.query("SELECT * FROM club WHERE Description = '"+req.body.Club_Name+"'",function(err,rows){
+        connection.query("SELECT * FROM club WHERE Club_Name = '"+req.body.Club_Name+"'",function(err,rows){
             console.log(rows);
             console.log("above row object");
             if (err)
                 console.log(err);
             if (rows.length) {
-                console.log("name taken");
+                res.render('signup_create_club.ejs', { 
+                    message: "This club name is already taken"
+                }); 
+                // console.log("name taken");
+                // res.writeHead(303, { Location : '/signup_create_club', user:req.user});
+                // res.end();
             } 
             else {
                 // if there is no user with that email

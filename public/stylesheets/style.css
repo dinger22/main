@@ -149,6 +149,15 @@ ul.tab li a:focus, .active {
 
 .profilebox1, .profilebox3{
 	width: 50%;
+	float: right;
+	margin:1%;
+	margin-right: 10%;
+
+	padding-bottom: 1%;
+}
+
+.profilebox1_club{
+	width: 50%;
 	float: left;
 	margin:1%;
 	padding-bottom: 1%;
