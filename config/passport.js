@@ -7,7 +7,7 @@ var LocalStrategy   = require('passport-local').Strategy;
 //var User            = require('../app/models/user');
 var mysql        = require("mysql");
 var connection  = mysql.createConnection({
-  host: "groop123.ctrhjjzjrs0h.us-west-2.rds.amazonaws.com",
+  host: "groop1.ctrhjjzjrs0h.us-west-2.rds.amazonaws.com",
   user: "groopdb",
   password: "11235813",
   database: "mydb",
