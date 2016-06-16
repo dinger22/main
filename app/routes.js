@@ -179,6 +179,36 @@ module.exports = function(app, passport) {
             }
 
         }
+        else if (req.body.actionType == "delete_task"){
+            if (req.body.payID == null){
+                connection.query("SELECT Events_idEvents FROM tasks where idTasks = ?",[req.body.taskID],function(err,idEvents){
+                    var event_number = idEvents[0].Events_idEvents;
+                    connection.query("DELETE FROM tasks WHERE idTasks = ?",[req.body.taskID],function(err,rows){
+                        if (err)
+                            console.log(err);
+                        else{
+                            res.writeHead(303, { Location : req.url+"?event_number="+event_number });
+                            res.end();
+                        }
+                    });
+                });
+            }
+            else{
+                connection.query("SELECT Events_idEvents FROM expense where idAccounting = ?",[req.body.payID],function(err,idEvents){
+                    var event_number = idEvents[0].Events_idEvents;
+                    connection.query("DELETE FROM expense WHERE idAccounting = ?",[req.body.payID],function(err,rows){
+                        if (err)
+                            console.log(err);
+                        else{
+                            res.writeHead(303, { Location : req.url+"?event_number="+event_number });
+                            res.end();
+                            
+                        }
+                    });
+                });   
+            }
+
+        }
         else{
             if (req.body.title_pay == null){
                 connection.query("SELECT * FROM tasks WHERE Task_name = '"+req.body.Task_name+"' AND Events_idEvents = '"+req.body.eventID+"'",function(err,rows){

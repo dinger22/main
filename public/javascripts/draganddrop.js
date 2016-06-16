@@ -123,6 +123,7 @@ function createtimeline1(){
   google.visualization.events.addListener(tl1, 'add', onadd);
   google.visualization.events.addListener(tl1, 'rangechange', onrangechange1);
   google.visualization.events.addListener(tl1, 'editEvent', editEvent);
+  google.visualization.events.addListener(tl1, 'delete', delete_use_cross);
   // Draw our tl1 with the created data and options
   tl1.draw(data);
   tl1.setVisibleChartRangeNow();
@@ -433,6 +434,49 @@ function openDialogForPayment(){
   var pay_time =  $("#pay_time");
   pay_time.val(date_to_yyyymmdd(eventStart));
 }
+
+function delete_use_cross() {
+  var sel = tl1.getSelection();
+  var row = sel[0].row;
+  var item = tl1.items[row];
+  var start = item.start;
+  var content = item.content;
+  var title_content = content.split(">"),
+    is_pay = title_content[0].search("/images/payment.png");
+  var title = title_content[1];
+
+  var update_status_form = document.createElement("form");
+  update_status_form.setAttribute("method", "post");
+  update_status_form.setAttribute("action", "/event_planning");
+
+  var actionTypeField = document.createElement("input");
+  actionTypeField.setAttribute("type", "hidden");
+  actionTypeField.setAttribute("value", "delete_task");
+  actionTypeField.setAttribute("name", "actionType");
+  update_status_form.appendChild(actionTypeField);
+
+  if (is_pay>0){
+    var pay_id_list = ex_pay_id.split(","),
+      pay_title_list = ex_pay_entry.split(",");
+    var ind = pay_title_list.indexOf(title);
+    var complete_pay_title = document.createElement("input");
+    complete_pay_title.setAttribute("type", "hidden");
+    complete_pay_title.setAttribute("value", pay_id_list[ind]);
+    complete_pay_title.setAttribute("name", "payID");
+    update_status_form.appendChild(complete_pay_title);
+  }
+  else{
+    var tasks_id_list = ex_tasks_id.split(","),
+      title_list = ex_tasks_content.split(",");
+    var ind = title_list.indexOf(title);
+    var complete_task_title = document.createElement("input");
+    complete_task_title.setAttribute("type", "hidden");
+    complete_task_title.setAttribute("value", tasks_id_list[ind]);
+    complete_task_title.setAttribute("name", "taskID");
+    update_status_form.appendChild(complete_task_title);
+  }
+  update_status_form.submit();
+};
 
 // callback function for the delete event. add the deleted item to the complicated timeline
 function oncomplete1() {
